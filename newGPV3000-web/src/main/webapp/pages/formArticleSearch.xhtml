@@ -1,0 +1,200 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="RECHERCHE  EN COURS ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <center>
+
+                <p:panel id="searchPane" >
+                    <h:form id="form">
+                        <p:panelGrid id="grid">
+                            <f:facet name="header">
+                                <p:row>
+                                    <center>
+                                        <p:column colspan="5">Recherche d' article(s)</p:column>
+                                    </center>
+                                </p:row>
+                                <p:row>
+                                    <p:column>Sel.</p:column>
+                                    <p:column colspan="2">Libelle</p:column>
+                                    <p:column colspan="2">Criteres de recherche</p:column>
+                                </p:row>
+                            </f:facet>
+                            <p:row>
+                                <p:column style="font-weight: bold;">
+                                    <p:selectBooleanCheckbox id="codeArticle" value="#{articleBean.byCodeArticle}">
+                                        <p:ajax global="false" update="grid" listener="#{articleBean.listenerCodeArticle}" />
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Rechercher par code article :" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:inputText autocomplete="off" required="#{articleBean.byCodeArticle}"   requiredMessage="Veuillez renseigner un code article" id="inputCodeArticle" value="#{articleBean.codeArticle}" disabled="#{!articleBean.byCodeArticle}"  />
+                                    <p:watermark value="entrer un code article" for="inputCodeArticle" />
+                                    <h:message id="msgs1" style="color:red;" for="inputCodeArticle" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="5" styleClass="ui-widget-header">
+                                    <p:spacer height="0" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="2">
+                                    <p:selectBooleanCheckbox id="motClef" value="#{articleBean.byMotClef}">
+                                        <p:ajax global="false" update="grid" listener="#{articleBean.listenerMotClef}" />
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                                <p:column colspan="4" style="font-weight: bold;"  styleClass="ui-widget-header">
+                                    <center>
+                                        <h:outputText value="Recherche par mot-clef  " style="font-weight:bold" />
+                                    </center>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Recherche par  mot clef  :" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:inputText required="#{articleBean.byMotClef}"  requiredMessage="Veuillez renseigner mot-clef" id="inputMotClef" value="#{articleBean.motClef}" disabled="#{!articleBean.byMotClef}" />
+                                    <p:watermark value="entrer un mot-clef" for="inputMotClef" />
+                                    <h:message id="msgs2" style="color:red;" for="inputMotClef" />
+                                </p:column>
+                            </p:row>
+
+
+
+                            <p:row>
+                                <p:column rowspan="5">
+                                    <p:selectBooleanCheckbox value="#{articleBean.byClassification}">
+                                        <p:ajax global="false" update="grid" listener="#{articleBean.listenerClassification}" />
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                                <p:column colspan="4" style="font-weight: bold;"  styleClass="ui-widget-header">
+                                    <center>
+                                        <h:outputText value="Recherche par classification " style="font-weight:bold" />
+                                    </center>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Secteur:" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:selectOneMenu style="width: 200px;" height="250" id="secteur" value="#{articleBean.secteurSelected}" converter="secteurConverter" disabled="#{!articleBean.byClassification}">
+                                        <f:selectItems value="#{articleBean.listSecteur}" var="sec" itemLabel="#{sec.code} - #{sec.libelle}" itemValue="#{sec}" />
+                                        <p:ajax global="false" update="rayon famille sousFamille" listener="#{articleBean.handleRayons}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Rayon:" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:selectOneMenu style="width: 200px;" height="250" id="rayon" value="#{articleBean.rayonSelected}" converter="rayonConverter" disabled="#{!articleBean.byClassification}">
+                                        <f:selectItems value="#{articleBean.listRayon}" var="rayo" itemLabel="#{rayo.code} - #{rayo.libelle}" itemValue="#{rayo}" />
+                                        <p:ajax global="false" update="famille sousFamille" listener="#{articleBean.handleFamilles}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Famille:" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:selectOneMenu style="width: 200px;" height="250" id="famille" value="#{articleBean.familleSelected}" converter="familleConverter" disabled="#{!articleBean.byClassification}">
+                                        <f:selectItems value="#{articleBean.listFamille}" var="fam" itemLabel="#{fam.code} - #{fam.libelle}" itemValue="#{fam}" />
+                                        <p:ajax global="false" update="sousFamille" listener="#{articleBean.handleSousFamilles}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <h:outputText value="Sous-familles" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2" style="font-weight: bold;">
+                                    <p:selectOneMenu style="width: 200px;" height="300" id="sousFamille" value="#{articleBean.sousFamilleSelected}" converter="sousFamilleConverter" disabled="#{!articleBean.byClassification}">
+                                        <f:selectItems value="#{articleBean.listSousFamille}" var="sfam" itemLabel="#{sfam.code} - #{sfam.libelle}" itemValue="#{sfam}" />
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="5" styleClass="ui-widget-header">
+                                    <p:spacer height="0" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column rowspan="3">
+                                    <p:selectBooleanCheckbox value="#{articleBean.byGisement}">
+                                        <p:ajax update="grid" global="false" listener="#{articleBean.listenerGisement}" />
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                                <p:column colspan="4" style="font-weight: bold;"  styleClass="ui-widget-header">
+                                    <center>
+                                        <h:outputText value="Recherche par gisement " style="font-weight:bold" />
+                                    </center>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Gisement début :" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:inputText required="#{articleBean.byGisement}" id="inputGisementDebut" requiredMessage="Veuillez renseigner un gisement de début" value="#{articleBean.gisementDebut}" disabled="#{!articleBean.byGisement}" maxlength="8"/>
+                                    <p:watermark value="gisement de début" for="inputGisementDebut" />
+                                    <h:message id="msgs3" style="color:red;" for="inputGisementDebut" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Gisement fin :" style="font-weight:bold" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:inputText required="#{articleBean.byGisement}" id="inputGisementFin" requiredMessage="Veuillez renseigner un gisement de fin" value="#{articleBean.gisementFin}" disabled="#{!articleBean.byGisement}" maxlength="8"/>
+                                    <p:watermark value="gisement de fin" for="inputGisementFin" />
+                                    <h:message id="msgs4" style="color:red;" for="inputGisementFin" />
+                                </p:column>
+                            </p:row>
+
+                            <f:facet name="footer">
+                                <p:row>
+                                    <p:column colspan="5">
+                                        <center>
+                                            <p:commandButton id="searchButton" global="true" style="color:blue;width:200px;" action="#{articleBean.search}" ajax="false" update="growl" type="submit" value="RECHERCHER" />
+                                        </center>
+                                    </p:column>
+                                </p:row>
+                            </f:facet>
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+            </center>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

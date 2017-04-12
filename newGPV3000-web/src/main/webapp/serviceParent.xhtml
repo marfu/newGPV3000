@@ -1,0 +1,227 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+
+                <div >
+                    <div style="float:left;width: 40%"> 
+                        <h:form>
+                            <ui:repeat var="str" value="#{serviceBean.listTServiceParent}" id='listViewDetailChambre'>
+                                <h:panelGroup>
+                                    <div class="Container25 Responsive " style="width: 200px">
+                                        <div class="ContainerIndent">
+                                            <p:panel style="min-height: 100px;">
+                                                <div class="Container">
+                                                    <i class="icon-rocket Fs50 Fleft Wid25 red TexAlCenter"></i>
+                                                    <div class="Fs15 Fright MarTop10 leaden Wid70" >
+                                                        <p:commandLink id="ajax" value="  #{str.sceNom}" actionListener="#{serviceBean.detailEBCF}"  onclick="PF('dlg2').show();" update=":form">
+                                                            <f:param name ="parentId" value="#{str.sceId}" />
+
+                                                        </p:commandLink>
+
+                                                    </div>
+
+
+
+                                                </div>
+                                            </p:panel>
+                                        </div>
+                                    </div>
+
+
+                                </h:panelGroup>
+                            </ui:repeat>
+                        </h:form>
+                    </div> 
+
+                    <div style="float:left;width: 60%">
+                        <h:form id="formRecap" >
+                            <p:messages autoUpdate="true"/>
+                            <div align="center"><h:outputText value="Recaptilatif" /></div>
+
+
+                            <p:dataTable id="tabRecap" rowIndexVar="var" var="list" value="#{serviceBean.ldto}">
+
+
+
+                                <p:column style="text-align:right" headerText="Nom">
+
+                                    <h:outputText value="#{list.sceNom}" style="width: 100px;">
+                                        <f:convertNumber integerOnly="true" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="text-align:right;column-width: 55px"  headerText="qte">
+
+                                    <p:inputText  value="#{list.qte}" style="width: 50px;"/>
+
+                                </p:column>
+                                <p:column style="text-align:right;column-width: 55px" headerText="PrixU">
+                                    <h:outputText value="#{list.scePrix}" style="width: 20px;">
+                                        <f:convertNumber integerOnly="true" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column  headerText="prix Total" style="text-align:right;column-width: 55px" >
+
+                                    <h:outputText value="#{list.totalPrice}" style="width: 20px;">
+                                        <f:convertNumber integerOnly="true" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column footerText=" " style="text-align:left"/>
+                                        <p:column footerText=" " style="text-align:left"/>
+                                        <p:column footerText="Totals: " style="text-align:right"/>
+                                        <p:column footerText="#{serviceBean.prixTot} F CFA"  style="font-size: 20px;color: red; font-weight: bolder"/>
+
+                                    </p:row>
+                                </p:columnGroup>
+
+
+                            </p:dataTable>
+
+                            <div align="center"> <p:commandButton id="searchButton" global="true" style="color:blue;width:200px;" value="Valider" onclick="PF('showConfirmation').show();"/></div>
+
+
+
+
+
+
+                        </h:form>    
+                    </div>  
+                </div>
+
+                <p:dialog header="Service " widgetVar="dlg2" modal="true" height="auto" >
+
+
+                    <f:view>
+                        <h:form id="form" >
+                            <p:messages autoUpdate="true"/>
+                            <div align="center"><h:outputText value="hhhhhh" /></div>
+                            <p:tabView var="str" value="#{serviceBean.listTServiceIntermediaire}" id="view">
+
+                                <p:ajax event="tabChange" listener="#{serviceBean.onTabChange(str.sceId)}" update=":form"/>
+
+                                <p:tab id="tabDet" title=" #{str.sceNom}" >
+
+                                    <p:dataTable id="comDetTable" rowIndexVar="var" var="detCom" value="#{serviceBean.listTServiceTerminal}">
+
+
+
+                                        <p:column style="text-align:right" headerText="Nom">
+
+                                            <h:outputText value="#{detCom.sceNom}">
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column style="text-align:right" headerText="Prix">
+                                            <h:outputText value="#{detCom.scePrix}" >
+                                                <f:convertNumber integerOnly="true" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column  headerText="Qte.com"  >
+                                            <p:inputText id="qtesai" value="#{detCom.qte}"  >
+                                                <f:ajax event="blur"  listener="#{serviceBean.onblurvalue(detCom)}"/> 
+                                            </p:inputText>
+
+                                        </p:column>
+                                        <p:column  headerText="">
+                                            <p:commandButton value="Ajouter"  update=":formRecap" icon="ui-icon-coheck" ajax="true" style="margin-right:10px" actionListener="#{serviceBean.calculByID(detCom)}">
+                                                <f:param name="qte"  value="#{detCom.qte}" />
+                                            </p:commandButton> 
+
+                                        </p:column>
+
+
+                                    </p:dataTable>
+
+                                </p:tab>
+                            </p:tabView>
+                        </h:form>    
+                    </f:view>
+
+                </p:dialog>   
+
+                <p:dialog header="CONFIRMATION " widgetVar="showConfirmation" modal="true" height="auto" >
+
+
+                    <f:view>
+                        <h:form id="formConfirmation" >
+                            <p:messages autoUpdate="true"/>
+                            <div align="center"><h:outputText value="VOULEZ- VOUS LIER LA COMMANE A UNE CHAMBRE ?" /></div>
+                            <div align="center"> <p:selectOneMenu value="#{serviceBean.chambreid}" required="true" label="Niveau hierachie">  
+                                    <f:selectItem itemLabel="NON" itemValue="0" />  
+                                    <f:selectItems value="#{chambreBean.listTChambre}" var="tag1"
+                                                   itemLabel="#{tag1.chNumeroChambre}" itemValue="#{tag1.chId}"/>  
+                                </p:selectOneMenu>
+                            </div>
+                            <div align="center"><p:commandButton value="Valider" actionListener="#{serviceBean.creerFacture}" update=":formRecap" oncomplete="PF('showConfirmation').hide();"/></div>
+
+
+                        </h:form>    
+                    </f:view>
+
+                </p:dialog> 
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

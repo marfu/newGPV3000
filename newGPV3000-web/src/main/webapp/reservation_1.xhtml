@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <p:tabView>
+            <p:tab title="Nouveau">
+                <h:form id="form">
+                    <h:panelGrid columns="4" cellpadding="10">
+                        <h:panelGrid>
+                            <p:outputLabel for="popup" value="Date Debut:" />
+                            <p:calendar id="popup" value="#{reservationBean.dateDebut}" />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="popup2" value="Date fin" />
+                            <p:calendar id="popup2" value="#{reservationBean.dateFin}" />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="catChambre" value="Catégorie chambre" />
+                            <p:selectOneMenu value="#{reservationBean.idCategorieChambre}" id="catChambre" label="Menu parent" style="width:270px !important">  
+
+                                <f:selectItem itemLabel="-- Tous --" itemValue="" />  
+                                <f:selectItems value="#{categorieChambreBean.listTCategorieChambre}" var="tag"  itemLabel="#{tag.catChambreLib}" itemValue="#{tag.catChambreId}"/>  
+
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:outputLabel for="catChambre" value="" />
+                            <p:commandButton value="Rechercher" id="ajax"  actionListener="#{reservationBean.rechercher}" styleClass="ui-priority-primary" />
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+                <h:form id="panel">
+                    <p:panelGrid style="margin-top:20px;width: 100%" >
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column colspan="7">REPARTITION DES CHAMBRES PAR CATEGORIE ET ETAT</p:column>
+                            </p:row>
+                            <p:row id="row">
+                                <p:column >Categorie chambre</p:column>
+                                <p:column >Total </p:column>
+                                <p:column >Libre</p:column>
+                                <p:column>Occupée</p:column>
+                                <p:column>Reservée</p:column>
+
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column >Categorie chambre</p:column>
+                            <p:column >0 </p:column>
+                            <p:column >0</p:column>
+                            <p:column>0</p:column>
+                            <p:column>0</p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </p:tab>
+            <p:tab title="Réservation">
+                <h:panelGrid columns="2" cellpadding="10">
+
+                </h:panelGrid>
+            </p:tab>
+
+        </p:tabView>
+    </ui:define>
+
+</ui:composition>

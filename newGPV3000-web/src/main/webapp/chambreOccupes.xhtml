@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+
+            .NON_CONFIRMEE{color: orange;font-weight: bold}
+            .CONFIRMEE{color: green;font-weight: bold}
+            .ANNULEE{color:red;font-weight: bold}
+
+        </style>
+        <div class="Container100">
+            <div class="ContainerIndent">
+
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Gestion des réservations" url="#" />
+                </p:breadCrumb>
+                <div class="EmptyBox20"></div>
+
+
+                <h:form id="viewReservation">
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:dataTable var="item" value="#{chambreFactureBean.chambreOccupation}" id="grid" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15"
+
+                                 selection="#{chambreFactureBean.chambreOccupationSelected}" 
+                                 rowKey="#{item.factureId}" 
+                                 >
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                        <p:column headerText="N° réservation">
+                            <h:outputText value="#{item.numReservation}" />
+                        </p:column>
+                        <p:column headerText="N° chambre">
+                            <h:outputText value="#{item.chambre.chNumeroChambre}" />
+                        </p:column>
+
+                        <p:column headerText="Client">
+                            <h:outputText value="#{item.client.cliNom}" />
+                            <h:outputText value="#{item.client.cliPrenom}" />
+                        </p:column>
+
+
+                        <p:column style="width:32px">
+
+                        </p:column>
+
+                        <p:column style="width:32px">
+
+                        </p:column>
+                        <p:column style="width:32px">
+
+
+
+
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton process="grid"  action="#{chambreFactureBean.loadDetailsFacture}"  update=":viewReservation:multiCarDetail" icon="ui-icon-search" value="Facturer" oncomplete="PF('multiCarDialog').show()" />
+                        </f:facet>
+
+                    </p:dataTable>
+
+                    <p:dialog header="Etablir facture" widgetVar="multiCarDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="1200" >
+                        <p:outputPanel id="multiCarDetail" style="text-align:center;">
+                            <div>
+                                <div style="float:left">
+                                    <h:panelGrid columns="1" cellpadding="5">
+                                        <h:panelGrid columns="2" cellpadding="5">
+                                            <h:outputLabel value="Date:"  />
+                                            <h:outputText style="color:black;font-weight: bold"  value="#{chambreFactureBean.fac.factDateCreate}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" /></h:outputText>
+                                        </h:panelGrid>
+
+                                    </h:panelGrid>
+                                </div>
+                                <div style="float:left">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputLabel value="Client :" />
+
+                                        <p:selectOneMenu  value="#{chambreFactureBean.clientId}"  label="Remise">  
+                                            <p:ajax listener="#{chambreFactureBean.findDepository}" update="depot" />
+                                            <f:selectItem itemLabel="--Choisir un client--" itemValue="" />                                     
+                                            <f:selectItems value="#{chambreFactureBean.clientByChoose}" var="tag1"  itemLabel="#{tag1.cliNom}" itemValue="#{tag1.cliId}"/>  
+
+                                        </p:selectOneMenu>
+                                    </h:panelGrid>
+
+                                </div>
+                                <div style="float:left">
+                                    <h:panelGrid columns="2" cellpadding="5" id="depot" rendered="#{chambreFactureBean.deposit > 0}">
+                                    <h:outputLabel value="Dépot:"  />
+                                    <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.deposit}" />
+                                    </h:panelGrid>
+                                </div>
+
+
+                                <div style="float:left">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputLabel value="Remise :" />
+
+                                        <p:selectOneMenu  value="#{chambreFactureBean.remise}"  label="Remise">  
+
+                                            <f:selectItem itemLabel="--Remise--" itemValue="" />                                     
+                                            <f:selectItems value="#{remiseBean.listRemise}" var="tag"  itemLabel="#{tag.remiseLib}" itemValue="#{tag.remiseId}"/>  
+
+                                        </p:selectOneMenu>
+                                    </h:panelGrid> </div>
+                                <div style="clear:both"> </div>
+                            </div>
+                            <div class="EmptyBox20"></div>
+                            <div class="EmptyBox20"></div>
+                            <p:dataTable var="item" value="#{chambreFactureBean.chambreOccupeDto}" id="listChamchoose" 
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15"
+
+                                         scrollable="true"
+                                         >
+
+
+                                <p:column headerText="N° réservation">
+                                    <h:outputText value="#{item.occupation.numReservation}" />
+                                </p:column>
+                                <p:column headerText="N° chambre">
+                                    <h:outputText value="#{item.occupation.chambre.chNumeroChambre}" >
+
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Occupant">
+                                    <h:outputText value="#{item.occupation.client.cliNom}" />
+                                    <h:outputText value=" " />
+                                    <h:outputText value="#{item.occupation.client.cliPrenom}" />
+                                </p:column>
+
+                                <p:column headerText="Date arrivé">
+                                    <h:outputText value="#{item.occupation.occDateArr}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Date départ">
+                                    <h:outputText value="#{item.occupation.occDateDep}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+
+                                <p:column headerText="Nombre de nuits">
+                                    <h:outputText value="#{item.nbreNuits}" >
+
+                                    </h:outputText>
+
+                                </p:column>
+                                <p:column headerText="Forfait">
+                                    <h:outputText value="#{item.chambreOccupation.forfait.offTitre}" >
+
+                                    </h:outputText>
+
+                                </p:column>
+
+                                <p:column headerText="Prix">
+                                    <h:outputText value="#{item.prix}" >
+
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Total">
+                                    <h:outputText value="#{item.total}" >
+
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton oncomplete="PF('carDialog').show()" update=":viewReservation:carDetail" icon="ui-icon-edit" title="View">
+                                        <f:setPropertyActionListener value="#{item}" target="#{chambreFactureBean.chambreOccSelectedDto}" />
+                                    </p:commandButton>
+                                </p:column>
+
+
+                            </p:dataTable>
+                            <div class="EmptyBox20"></div>
+                            <div class="EmptyBox20"></div>
+
+                            <div> 
+                                <div style="float:right"> 
+                                    <h:panelGrid columns="2" cellpadding="5" id="montan">
+
+                                        <h:outputLabel value="Montant total:"  />
+                                        <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.montantTotal}" />
+
+
+                                        <h:outputLabel value="Tva :"  />
+                                        <h:outputText style="color:black;font-weight: bold" value="18%" />
+
+                                        <h:outputLabel value="Montant TTC :"  />
+                                        <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.montantTTC}" />
+
+
+
+                                    </h:panelGrid>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                            <p:commandButton actionListener="#{chambreFactureBean.changeDate}" update=":viewReservation:multiCarDetail" oncomplete="PF('carDialog').hide()" value="Valider et encaisser" title="View">
+
+                            </p:commandButton>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Modifier Date" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="carDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2" rendered="#{not empty chambreFactureBean.chambreOccSelectedDto}" columnClasses="label,value">
+
+                                <h:outputText value="Date Arrivée:" />
+
+                                <p:calendar  value="#{chambreFactureBean.chambreOccSelectedDto.occupation.occDateArr}" required="true" />
+
+                                <h:outputText value="Date Depart:" />
+
+                                <p:calendar  value="#{chambreFactureBean.chambreOccSelectedDto.occupation.occDateDep}" required="true"/>
+
+
+                            </p:panelGrid>
+                            <p:commandButton actionListener="#{chambreFactureBean.changeDate}" update=":viewReservation:multiCarDetail :viewReservation:montan" oncomplete="PF('carDialog').hide()" value="Valider" title="View">
+
+                            </p:commandButton>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+        <script>
+
+            PrimeFaces.widget.Dialog.prototype.applyFocus = function () {
+                var firstInput = this.jq.find(':not(:submit):not(:button):input:visible:enabled:first');
+                if (!firstInput.hasClass('hasDatepicker')) {
+                    firstInput.focus();
+                }
+            }
+        </script>
+
+    </ui:define>
+
+</ui:composition>

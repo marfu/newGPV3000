@@ -1,0 +1,29 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.nov.hotel.dao;
+
+
+
+import com.nov.hotel.entities.TOccupation;
+import java.util.List;
+
+
+
+
+
+/**
+ *
+ * @author manukey
+ */
+public interface TOccupationDao extends GenericDao<TOccupation>{
+    
+     public TOccupation createOrUpdate(TOccupation u);
+     
+      public TOccupation getOccupation(long id);
+      
+       public List<TOccupation> listTOccupation();
+       
+}

@@ -1,0 +1,182 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Creation/modification d' un utilisateur" widgetVar="dlg2" modal="true" height="auto">
+                <h:form id="myform">
+                    <h:panelGrid columns="3">
+                        <h:panelGrid id="creaMod" columns="3">
+                            <h:outputText value="Nom d' utilisateur  :*" for="userName" />
+                            <h:panelGroup>
+                                <p:inputText id="userName" value="#{userBean.selectedUser.userName}" required="true">
+                                    <p:ajax event="blur" update="msgUserName" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgUserName" for="userName" />
+
+                            <h:outputText value="Nom de famille :" for="familyName" />
+                            <h:panelGroup>
+                                <p:inputText id="familyName" value="#{userBean.selectedUser.familyName}">
+                                    <p:ajax event="blur" update="msgFamilyName" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgFamilyName" for="familyName" />
+                            <h:outputText value="Prénom :*" for="firstName" />
+                            <h:panelGroup>
+                                <p:inputText id="firstName" value="#{userBean.selectedUser.firstName}">
+                                    <p:ajax event="blur" update="msgFirstName" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgFirstName" for="firstName" />
+                            <h:outputText value="Mot de passe :" for="password" rendered="#{userBean.enabledPassword == true}"/>
+                            <h:panelGroup rendered="#{userBean.enabledPassword == true}">
+                                <p:inputText id="password" value="#{userBean.selectedUser.password}" type="password">
+                                    <p:ajax event="blur" update="msgPassword" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgPassword" for="password" rendered="#{userBean.enabledPassword == true}"/>
+
+                            <h:outputText value="Matricule :*" for="matricule" />
+                            <h:panelGroup>
+                                <p:inputText id="matricule" value="#{userBean.selectedUser.matricule}">
+                                    <p:ajax event="blur" update="msgMatricule" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgMatricule" for="matricule" />
+
+                            <h:outputText value="Alerte sur les commandes passées depuis :" for="alerte" />
+                            <h:panelGroup>
+                                <p:inputText id="alerte" value="#{userBean.selectedUser.alerte}">
+                                    <p:ajax event="blur" update="msgAlerte" />
+                                </p:inputText>
+                            </h:panelGroup>
+                            <p:message id="msgAlerte" for="alerte" />
+                            <h:outputText value="Actif : " />
+                            <h:selectBooleanCheckbox value="#{userBean.selectedUser.enable}" />
+                        </h:panelGrid>
+                        <hr style="height:300px;margin-left: 10px;margin-right: 10px;  color: #e4e6e8;"></hr>
+                        <h:panelGrid columns="2">
+
+                            <h:outputText value="Roles :" />
+                            <h:panelGroup style="width:50%;">
+                                <p:pickList value="#{userBean.roles}" var="role" converter="roleConverter" itemLabel="#{role.designation}" itemValue="#{role}" addLabel="Ajouté" addAllLabel="Ajouté tout" removeLabel="Retiré" removeAllLabel="Retiré tout">
+                                    <f:facet name="sourceCaption">Role(s) disponible</f:facet>
+                                    <f:facet name="targetCaption">Role(s) selectionné(s)</f:facet>
+                                </p:pickList>
+                            </h:panelGroup>
+                            <h:outputText value="Magasins :" />
+                            <h:panelGroup>
+                                <p:pickList addLabel="Ajouté" addAllLabel="Ajouté tout" removeLabel="Retiré" removeAllLabel="Retiré tout" value="#{userBean.pvts}" var="pvt" converter="posConverter" itemLabel="#{pvt.raisonSocialFournisseur}" itemValue="#{pvt}">
+                                    <f:facet name="sourceCaption">Magasin(s) disponible</f:facet>
+                                    <f:facet name="targetCaption">Magasin(s) selectionné(s)</f:facet>
+                                </p:pickList>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:commandButton type="submit" action="#{userBean.saveUser}" value="Sauvegarde/M.A.J" update=":dataForm"  />
+                    <p:commandButton type="submit" style="float: right" value="Annuler" oncomplete="PF('dlg2').hide();" />
+
+                </h:form>
+            </p:dialog>   
+            <p:dialog header="Reinitialiser mot de passe" widgetVar="passwordReini" modal="true" height="auto">
+                <h:form id="myformPass">
+
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+
+
+
+                    <h:panelGrid columns="2">
+                        <h:panelGrid id="creaModPass" columns="2">
+
+                            <h:outputText value="Mot de passe :" for="passwordReni" />
+                            <h:panelGroup >
+                                <p:password id="passwordReni" value="#{userBean.newPassword}"   label="Mot de passe" required="true">
+                                    <!--                                    <p:ajax event="blur" update="msgPasswordReni" />-->
+                                </p:password>
+                            </h:panelGroup>
+
+                            <h:outputText value="Confirmer mot de passe :" for="passwordReniVerif" />
+                            <h:panelGroup >
+                                <p:password id="passwordReniVerif" value="#{userBean.confirmPassword}" match="passwordReni" validatorMessage="Les mots de passe ne correspondent pas"  label="Confirmer mot de passe" required="true">
+                                    <!--                                    <p:ajax event="blur" update="msgPasswordReniVerif" />-->
+                                </p:password>
+                            </h:panelGroup>
+
+
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:commandButton type="submit" action="#{userBean.changePassword}"  value="M.A.J" update=":dataForm creaModPass"  />
+                    <p:commandButton  style="float: right" value="Annuler" oncomplete="PF('passwordReini').hide();" />
+
+                </h:form>
+            </p:dialog>   
+
+
+
+            <p:panel id="pane1" header="Gestion des utilisateurs">
+                <h:form id="dataForm">
+                    <p:dataTable id="dataUser" var="usr" value="#{userBean.users}" paginator="true" rows="10">
+                        <f:facet name="header">
+                            <p:commandButton ajax="true" value="Nouvel utilisateur" actionListener="#{userBean.newUser}" update=":myform" oncomplete="PF('dlg2').show();"/>
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Login" />
+                            </f:facet>
+
+                            <h:outputText value="#{usr.userName}" />
+
+
+                        </p:column>
+                        <p:column sortBy="#{usr.familyName}" filterBy="#{usr.familyName}">
+                            <f:facet name="header">
+                                <h:outputText value="Nom de famille" />
+                            </f:facet>
+                            <h:outputText value="#{usr.familyName}" />
+                        </p:column>
+                        <p:column sortBy="#{usr.firstName}" filterBy="#{usr.firstName}">
+                            <f:facet name="header">
+                                <h:outputText value="Prenom" />
+                            </f:facet>
+                            <h:outputText value="#{usr.firstName}" />
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:commandButton ajax="true" actionListener="#{userBean.detailUser}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                <f:param name="userId" value="#{usr.userName}" />
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="">
+                            <p:commandButton ajax="true" value="renitialiser mot de passe" actionListener="#{userBean.detailUser}" update=":myform" oncomplete="PF('passwordReini').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                <f:param name="userId" value="#{usr.userName}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+            <!--            <p:panel id="panelFormNew" header="Creation/modification d' un utilisateur">
+                           
+                        </p:panel>-->
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

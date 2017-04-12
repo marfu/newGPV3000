@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="hotelNovPu" transaction-type="JTA">
+    <!--<jta-data-source>java:/GPV3000ProdDS</jta-data-source>-->
+    <jta-data-source>java:/HotelNovSqlDS</jta-data-source>
+    <!--<jta-data-source>java:/MysqlClusterDS</jta-data-source>-->
+    <!--<jta-data-source>java:/GPV_SERVER_TEST</jta-data-source>-->
+    <properties>
+     <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.max_fetch_depth" value="2"/>
+      
+      <property name="hibernate.format_sql" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
+

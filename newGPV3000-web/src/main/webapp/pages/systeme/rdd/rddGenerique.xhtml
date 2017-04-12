@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Recherche en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane" header="Création des génériques pour la gestion des articles à poids variable">
+                <h:form enctype="multipart/form-data">
+                    <p:fileUpload label="Choisir" uploadLabel="Lancer" cancelLabel="Annuler" mode="advanced" fileUploadListener="#{exploitationBean.handleFileGisement}" />
+                </h:form>
+            </p:panel>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

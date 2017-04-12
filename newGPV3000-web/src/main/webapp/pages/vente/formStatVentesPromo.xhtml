@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="createPane">
+                <h:form id="form">
+                    <center>
+                        <p:panelGrid>
+                            <p:row>
+                                <p:column colspan="4" styleClass="ui-widget-header">
+                                    <center>
+                                        <h:outputText value="Statistique des ventes/sorties et Livraisons d'une Promo" />
+                                    </center>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText style="font-weight:bold;color:black;"
+                                                  value="Date de début (jj/mm/aaaa) :" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:calendar value="#{venteBean.dateDebut}" showOn="button"
+                                                required="true" pattern="dd/MM/yyyy" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText style="font-weight:bold;color:black;"
+                                                  value="Date de fin (jj/mm/aaaa) :" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:calendar value="#{venteBean.dateFin}" showOn="button"
+                                                required="true" pattern="dd/MM/yyyy" />
+                                </p:column>
+                            </p:row>
+                            <f:facet name="footer">
+                                <p:row>
+                                    <p:column colspan="5">
+                                        <center>
+                                            <p:commandButton
+                                                style="font-weight:bold;color:blue;width:195px;"
+                                                value="IMPRESSION" action="#{venteBean.printStatVentesPromo}"
+                                                 type="submit" />
+                                        </center>
+                                    </p:column>
+                                </p:row>
+                            </f:facet>
+                        </p:panelGrid>
+                    </center>
+                </h:form>
+            </p:panel>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png"
+                                url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

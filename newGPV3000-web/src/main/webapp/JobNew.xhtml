@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ContainerIndent">
+            <p:panel>
+                <div class="ContainerIndent">
+                    <h:form id="form">
+                        <div >
+                            <div class="ContainerIndent"><h:outputText value="Création de Tache planifiée" styleClass="FontBold Fs18 hardblue"></h:outputText></div>
+                            <div class="Container100" style="    background-color: #eff5fa; margin-top: 20px;">
+                                <div class="ContainerIndent">
+                                    <h:panelGrid columns="2" bgcolor="#eff5fa" >
+                                        <h:outputText value="Nom de la tache:"/>
+                                        <h:inputText id="jobName" value="#{JobMBean.newJob.jobName}"/>
+                                        <h:outputText value="Type de traitement:"/>
+                                        <p:selectOneMenu id="city" value="#{JobMBean.newJob.jobClassName}" effect="fold">
+                                            <f:selectItems value="#{JobMBean.tasks}" var="task" itemLabel="#{task.description}" itemValue="#{task.jndiName}" />
+                                        </p:selectOneMenu>
+
+                                        <h:outputLabel for="multiple" value="Magasins" />
+                                        <p:selectCheckboxMenu  id="multiple" value="#{JobMBean.selectedMags}" label="Derouler pour selectionner les magasins" 
+                                                               converter="magasinConverter"  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                            <f:selectItems value="#{JobMBean.listMags}" var="mag" itemLabel="#{mag.raisonSocialFournisseur}" itemValue="#{mag.pvtCode}" />
+                                        </p:selectCheckboxMenu>
+                                        
+                                        <h:outputText value="Date de début:"/>
+                                        <p:calendar id="startDate" value="#{JobMBean.newJob.startDate}"/>
+                                        <h:outputText value="Date de fin"/>
+                                        <p:calendar id="endDate" value="#{JobMBean.newJob.endDate}"/>
+                                        <h:outputText value="Seconde:"/>
+                                        <h:inputText id="second" value="#{JobMBean.newJob.second}"/>
+                                        <h:outputText value="Minute:"/>
+                                        <h:inputText id="minute" value="#{JobMBean.newJob.minute}"/>
+                                        <h:outputText value="Hour"/>
+                                        <h:inputText id="hour" value="#{JobMBean.newJob.hour}"/>
+                                        <h:outputText value="Day of Month:"/>
+                                        <h:inputText id="dayOfMonth" value="#{JobMBean.newJob.dayOfMonth}"/>
+                                        <h:outputText value="Month:"/>
+                                        <h:inputText id="month" value="#{JobMBean.newJob.month}"/>
+                                        <h:outputText value="Year:"/>
+                                        <h:inputText id="year" value="#{JobMBean.newJob.year}"/>
+                                        <h:outputText value="Day Of Week:"/>
+                                        <h:inputText id="dayOfWeek" value="#{JobMBean.newJob.dayOfWeek}"/>
+                                        <h:outputText value="Description de ta tache : "/>
+                                        <h:inputTextarea cols="40" rows="4" id="description" value="#{JobMBean.newJob.description}"/>
+
+                                    </h:panelGrid>
+                                    <h:commandButton id="back" value="Back" action="#{JobMBean.gotoListing}"/>
+                                    <h:commandButton id="create" value="Create" action="#{JobMBean.createJob}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </p:panel>
+
+            <div class="EmptyBox20"></div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

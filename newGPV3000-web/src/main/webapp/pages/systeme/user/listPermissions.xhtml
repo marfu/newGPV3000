@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1" header="Gestion des permissions">
+                <h:form id="form1">
+                    <p:dataTable id="dataPerm" var="perm" value="#{permissionBean.perms}" paginator="true" rows="10">
+                        <f:facet name="header">  
+                            Liste des permissions
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cible" />
+                            </f:facet>
+                            <p:commandLink immediate="true" value="#{perm.permissionId}" action="#{permissionBean.detailPerm}" ajax="false" type="submit">
+                                <f:param name="permId" value="#{perm.permissionId}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column sortBy="#{perm.name}" filterBy="">
+                            <f:facet name="header">
+                                <h:outputText value="Cible" />
+                            </f:facet>
+                            <h:outputText value="#{perm.name}" />
+                        </p:column>
+                        <p:column sortBy="" filterBy="">
+                            <f:facet name="header">
+                                <h:outputText value="action" />
+                            </f:facet>
+                            <h:outputText value="" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+            <p:panel id="panelFormNew" header="Creation/modification d' une permission">
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <h:panelGrid id="creaMod" columns="2">
+
+
+                        <h:outputLabel value="Profile:"  />
+                        <p:selectOneMenu value="#{permissionBean.codeProfile}" required="true" label="Role" style="width:270px !important">  
+
+                            <f:selectItem itemLabel="--Role--" itemValue="" />  
+                            <f:selectItems value="#{roleBean.roles}" var="tag"  itemLabel="#{tag.designation}" itemValue="#{tag.designation}"/>  
+                            <p:ajax event="blur" update="messages" />
+                        </p:selectOneMenu>
+
+
+                        <h:outputLabel value="Permission:"  />
+                        <p:tree value="#{permissionBean.perms2}" var="doc"
+                                selectionMode="checkbox"
+                                selection="#{treeSelectionView.selectedNodes1}">
+                            <p:ajax event="expand" update=":form:messages" listener="#{permissionBean.onNodeExpand}" />
+                            <p:ajax event="collapse" update=":form:messages" listener="#{permissionBean.onNodeCollapse}" />
+                            <p:ajax event="select" update=":form:messages" listener="#{permissionBean.onNodeSelect}" />
+                            <p:ajax event="unselect" update=":form:messages" listener="#{permissionBean.onNodeUnselect}" />
+
+                            
+                            <p:treeNode type="document" icon="ui-icon-document">
+                                <h:outputText value="#{doc.name}" />
+                            </p:treeNode>
+                            <p:treeNode type="picture" icon="ui-icon-image">
+                                <h:outputText value="#{doc.name}" />
+                            </p:treeNode>
+                            <p:treeNode type="mp3" icon="ui-icon-video">
+                                <h:outputText value="#{doc.name}" />
+                            </p:treeNode>
+                        </p:tree>
+
+                    </h:panelGrid>
+                    <p:commandButton type="submit" action="#{permissionBean.savePerm}" value="Sauvegarde/M.A.J" update="@form" />
+
+                </h:form>
+            </p:panel>
+
+
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

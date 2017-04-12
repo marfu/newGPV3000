@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1">
+                <h:form>
+                    <center>
+                        <p:panelGrid id="grid">
+                            <f:facet name="header">
+                                <p:row>
+                                    <center>
+                                        <p:column colspan="4">Remontèe des ventes WINSTORE</p:column>
+                                    </center>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="2">Description</p:column>
+                                    <p:column colspan="2">Action</p:column>
+                                </p:row>
+                            </f:facet>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Effectue la remontée des ventes de la journée précedente" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:commandButton value="EXECUTER" actionListener="#{venteBean.remonteDeWInstoreJ1}" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Effectue la remontée des ventes de la journée en cours (doit etre effectué apres la cloture de Winstore)" />
+                                </p:column>
+                                <p:column colspan="2">
+                                    <p:commandButton  value="EXECUTER" actionListener="#{venteBean.remonteDeWInstore}" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">
+                                    <h:outputText value="Effectue la remontée des ventes de la journée spécifié (doit etre utilisé en rattrage)" />
+                                </p:column>
+                                <p:column>
+                                    <p:calendar value="#{venteBean.dateDebut}" pattern="ddMMyyyy" />
+                                </p:column>
+                                <p:column>
+                                    <p:commandButton  value="EXECUTER" actionListener="#{venteBean.remonteDeWInstoreDate}" />
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </center>
+
+                </h:form>
+            </p:panel>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

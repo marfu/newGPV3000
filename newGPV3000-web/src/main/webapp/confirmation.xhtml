@@ -1,0 +1,424 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+
+            .NON_CONFIRMEE{color: orange;font-weight: bold}
+            .CONFIRMEE{color: green;font-weight: bold}
+            .ANNULEE{color:red;font-weight: bold}
+
+        </style>
+        <div class="Container100">
+            <div class="ContainerIndent">
+
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Gestion des réservations" url="#" />
+                </p:breadCrumb>
+                <div class="EmptyBox20"></div>
+
+
+                <h:form id="viewReservation">
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:dataTable var="item" value="#{allReservationBean.lisReservationDto}" id="grid" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+
+                        <p:column headerText="N° réservation">
+                            <h:outputText value="#{item.numeroReservation}" />
+                        </p:column>
+
+                        <p:column headerText="Client">
+                            <h:outputText value="#{item.nomClient}" />
+                        </p:column>
+                        <p:column headerText="N° téléphone">
+                            <h:outputText value="#{item.telephone}" />
+                        </p:column>
+
+                        <p:column headerText="Fait le">
+                            <h:outputText value="#{item.reservation}" />
+                        </p:column>
+
+                        <p:column headerText="Statut">
+                            <h:outputText value="#{item.statut}" class="#{item.statut}" />
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:commandButton ajax="true"  update=":pDialogEditReser" rendered="#{item.statut == 'NON_CONFIRMEE'}"  action="#{allReservationBean.detailReservation}" oncomplete="PF('detailsDialog').show();" icon="ui-icon fa fa-edit" style="color:white">
+                                <f:param name="reservationId" value="#{item.idReservation}" />
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column style="width:32px">
+                            <p:commandButton ajax="true" action="#{allReservationBean.detailReservation}" rendered="#{item.statut == 'NON_CONFIRMEE'}"  update=":pDialogConfReser" oncomplete="PF('confirmDialog').show();" icon="ui-icon fa fa-check" style="color:white">
+                                <f:param name="reservationId" value="#{item.idReservation}" />
+                            </p:commandButton>
+                        </p:column>
+                        <p:column style="width:32px">
+                          
+
+                                <p:commandButton  icon="ui-icon fa fa-trash" update="grid" rendered="#{item.statut == 'NON_CONFIRMEE' }" style="color:white" actionListener="#{allReservationBean.annulerReservation(item.idReservation)}" >
+                                    <p:confirm header="Annuler reservation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" >
+                                        <f:param name="chId" value="#{item.idReservation}" />
+                                    </p:commandButton>
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+
+                         
+                        </p:column>
+
+
+
+                    </p:dataTable>
+                </h:form>
+
+
+
+
+                <p:dialog header="Ajouter une chambre" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="600" >
+                    <h:form id="chambreChoose">
+                        <p:fieldset legend="Liste des chambres disponibles" style="margin-bottom:20px">
+                            <p:dataTable var="item" id="testDT" value="#{reservationBean.listChambreLibre}" scrollable="true" scrollHeight="200" selection="#{reservationBean.chambreDetails}" rowKey="#{item.chId}">
+                                <p:column headerText="Numero chambre">
+                                    <h:outputText value="#{item.chNumeroChambre}" />
+                                </p:column>
+
+                                <p:column headerText="Etat">
+                                    <h:outputText value="#{item.etat}" />
+                                </p:column>
+
+                                <p:column headerText="Libellé">
+                                    <h:outputText value="#{item.chLib}" />
+                                </p:column>
+
+                                <p:column headerText="Categorie">
+                                    <h:outputText value="#{item.chCategorie.catChambreLib}" />
+                                </p:column>
+                                <p:column style="width:32px;text-align: center">
+                                    <p:commandButton update=":id_form " action="#{allReservationBean.loadOffreTarifaire}" oncomplete="PF('forfaitDialog').show()" icon="ui-icon-search" title="View">
+                                        <f:setPropertyActionListener value="#{item}" target="#{allReservationBean.chambreDetails}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:fieldset>
+
+
+
+                        <p:fieldset legend="Liste des chambres" style="margin-bottom:20px">
+                            <p:dataTable var="item3" id="dataChoose" value="#{allReservationBean.listChambresDto}" scrollable="true" scrollHeight="200"  >
+                                <p:column headerText="N° chambre">
+                                    <h:outputText value="#{item3.numeroChambre}" />
+                                </p:column>
+
+
+
+                                <p:column headerText="Libellé">
+                                    <h:outputText value="#{item3.libChambre}" />
+                                </p:column>
+
+                                <p:column headerText="Categorie">
+                                    <h:outputText value="#{item3.catChambre}" />
+                                </p:column>
+
+                                <p:column headerText="Forfait">
+                                    <h:outputText value="#{item3.fofChambre}" /> 
+                                </p:column>
+
+                                <p:column headerText="Prix">
+                                    <h:outputText value="#{item3.prixFofChambre}" /> 
+                                </p:column>
+                                <p:column style="width:32px">
+
+                                    <p:commandButton   update="chambreChoose :pDialogEditReser" action="#{allReservationBean.deleteChoixChambre}" icon="ui-icon fa fa-trash" style="color:white" title="update">
+                                        <f:setPropertyActionListener value="#{item3}" target="#{allReservationBean.chambreDeleteDetails}" />
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:fieldset>
+                        <p:commandButton value="Reserver" id="nonAjax" actionListener="#{allReservationBean.valider}" ajax="false" style="text-align: center"/>
+
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="pDialogForfait2" header="Choix du forfait" widgetVar="forfaitDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <h:form id="id_form">
+                        <p:outputPanel id="myOutputPanel">
+                            <p:selectOneMenu value="#{allReservationBean.idCategorieChambre}"  label="Menu parent" style="width:270px !important"  >  
+
+                                <f:selectItem itemLabel="--Forfait--" itemValue="" />  
+                                <f:selectItems value="#{allReservationBean.listTOffreTarifaire}" var="tag"  itemLabel="#{tag.offTitre}" itemValue="#{tag.offreId}"/>  
+
+                            </p:selectOneMenu>
+
+                            <p:commandButton  update=":chambreChoose :pDialogEditReser" actionListener="#{allReservationBean.ajouterChambre}"  value="Valider" oncomplete="PF('forfaitDialog').hide()"  />  
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+
+
+
+                <p:dialog id="pDialogForfait25" header="Occupant" widgetVar="occDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <h:form >
+                        <p:outputPanel id="myOutputPanel"><h:panelGrid columns="1">
+                                <h:panelGrid columns="1" cellpadding="5">
+
+                                    <h:outputLabel value="Type pièce :" />
+                                    <p:selectOneMenu value="#{allReservationBean.typePiece}"   label="Type pièce" style="width:270px !important" rendered="#{reservationBean.testCat==true}">  
+
+
+                                        <f:selectItem itemLabel="--Type pièce--" itemValue="" />  
+                                        <f:selectItem itemLabel="PASSPORT" itemValue="PASSPORT" />  
+                                        <f:selectItem itemLabel="CNI" itemValue="CNI" /> 
+                                        <f:selectItem itemLabel="BADGE" itemValue="BADGE" /> 
+
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <h:outputLabel value="Numero piece :"  />
+
+                                    <p:inputText   title="Numero piece"  label="Numero piece" value="#{allReservationBean.clientOcc.numeroPieceIdentite}" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <h:outputLabel value="Nom :"/>
+
+                                    <p:inputText  value="#{allReservationBean.clientOcc.cliNom}" title="Nom"  label="Nom" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <h:outputLabel value="Prenom :"  />
+                                    <p:inputText  value="#{allReservationBean.clientOcc.cliPrenom}" title="Prenom"  label="Prenom" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="1" cellpadding="5">
+                                    <h:outputLabel value="Contact :"  />
+                                    <p:inputText value="#{allReservationBean.clientOcc.cliMsisdn}" title="Contact"  label="contactm" />
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <p:commandButton  update=":pDialogConfReser" actionListener="#{allReservationBean.ajouterOccupant}"  value="Valider" oncomplete="PF('occDialog').hide()"  />  
+
+                        </p:outputPanel>
+                    </h:form>
+
+                </p:dialog>
+
+
+                <p:dialog  header="Editer réservation"  widgetVar="detailsDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="800">
+                    <div>
+                        <div style="">
+                            <h:form id="pDialogEditReser">
+
+                                <p:fieldset legend="Séjour" style="margin-bottom:20px">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <h:outputLabel value="Enregistrée le :"  />
+                                        <p:calendar  value="#{allReservationBean.reservation.resDateCreate}" disabled="true" />
+
+
+                                        <h:outputLabel value="Date d'arrivée:" for="deb2" />
+                                        <p:calendar  value="#{allReservationBean.debut}">
+
+
+                                        </p:calendar>
+
+                                        <h:outputLabel value="Date départ:" for="fin2" />
+                                        <p:calendar   value="#{allReservationBean.fin}" >
+
+                                        </p:calendar>
+
+
+
+
+                                    </h:panelGrid>
+                                </p:fieldset>
+
+                                <p:fieldset legend="Chambres désirées" style="margin-bottom:20px">
+                                    <h:panelGrid columns="2">
+
+
+                                        <p:dataTable var="itemReser"  value="#{allReservationBean.listChambresDto}" scrollable="true" scrollHeight="200"  >
+                                            <f:facet name="header">
+                                                <p:commandButton  update="" value="Ajouter une chambre" oncomplete="PF('carDialog').show()" />
+                                            </f:facet>
+                                            <p:column headerText="N° chambre">
+                                                <h:outputText value="#{itemReser.numeroChambre}" />
+                                            </p:column>
+
+
+
+                                            <p:column headerText="Libellé">
+                                                <h:outputText value="#{itemReser.libChambre}" />
+                                            </p:column>
+
+                                            <p:column headerText="Categorie">
+                                                <h:outputText value="#{itemReser.catChambre}" />
+                                            </p:column>
+
+                                            <p:column headerText="Forfait">
+                                                <h:outputText value="#{itemReser.fofChambre}" /> 
+                                            </p:column>
+
+                                            <p:column headerText="Prix">
+                                                <h:outputText value="#{itemReser.prixFofChambre}" /> 
+                                            </p:column>
+                                            <p:column style="width:32px">
+
+                                                <p:commandButton  icon="ui-icon fa fa-trash" update="pDialogEditReser" style="color:white" actionListener="#{allReservationBean.deleteChambre(itemReser.idChambre)}" >
+                                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                                </p:commandButton>
+
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" >
+                                                        <f:param name="chId" value="#{itemReser.idChambre}" />
+                                                    </p:commandButton>
+                                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                                </p:confirmDialog>
+
+
+
+                                            </p:column>
+                                        </p:dataTable>
+
+
+                                    </h:panelGrid>
+                                </p:fieldset>
+
+                            </h:form>
+                        </div>
+
+                        <div style="clear:both"></div>
+                    </div>
+
+
+                </p:dialog>
+
+                <p:dialog  header="Confirmation"  widgetVar="confirmDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="1000">
+                    <div>
+                        <div style="">
+                            <h:form id="pDialogConfReser">   
+                                <div>
+                                    <div style="float:left ;width: 50%">
+                                        <p:fieldset legend="Séjour" style="margin-bottom:20px">
+                                            <h:panelGrid columns="2" cellpadding="5">
+                                                <h:panelGrid columns="1" cellpadding="5">
+                                                    <h:outputLabel value="N° de réservation:"  />
+                                                    <h:outputText style="color:red"  value="#{allReservationBean.reservation.resNumReservation}" />
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="1" cellpadding="5">
+                                                    <h:outputLabel value="Enregistrée le :"  />
+                                                    <p:calendar value="#{allReservationBean.reservation.resDateCreate}" disabled="true"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="1" cellpadding="5">
+                                                    <h:outputLabel value="Date d'arrivée:" for="deb2" />
+                                                    <p:calendar   value="#{allReservationBean.debut}" disabled="true"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="1" cellpadding="5">
+                                                    <h:outputLabel value="Date départ:" for="fin2" />
+                                                    <p:calendar value="#{allReservationBean.fin}" disabled="true"/> 
+                                                </h:panelGrid>
+
+
+
+
+
+                                            </h:panelGrid>
+                                        </p:fieldset>
+                                    </div>
+                                    <div style="float:left ;width: 50%">
+                                        <p:fieldset legend="Client" style="margin-bottom:20px">
+                                            <h:panelGrid columns="2" cellpadding="5">
+                                                <h:panelGrid columns="2" cellpadding="5">
+                                                    <h:outputLabel value="Raison sociale :"  />
+                                                    <h:outputText style="font-weight:bold;color:black" value="#{allReservationBean.reservation.resClient.raisonSociale}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2" cellpadding="5">
+                                                    <h:outputLabel value="Nom :"  />
+                                                    <h:outputText style="font-weight:bold;color:black" value="#{allReservationBean.reservation.resClient.cliNom}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2" cellpadding="5">
+                                                    <h:outputLabel value="Prénom:" />
+                                                    <h:outputText style="font-weight:bold;color:black"  value="#{allReservationBean.reservation.resClient.cliPrenom}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2" cellpadding="5">
+
+                                                    <h:outputLabel value="Contact :"/>
+                                                    <h:outputText style="font-weight:bold;color:black"   value="#{allReservationBean.reservation.resClient.cliMsisdn}" />
+                                                </h:panelGrid>
+
+                                            </h:panelGrid>
+                                        </p:fieldset>
+                                    </div>  
+                                </div>
+                                <div style="clear:both"></div>
+                                <p:fieldset legend="Chambres désirées" style="margin-bottom:20px">
+                                    <h:panelGrid columns="2">
+
+
+                                        <p:dataTable var="itemReser"  value="#{allReservationBean.detailsChambreOccupantsDto}" scrollable="true" scrollHeight="200"  >
+
+                                            <p:column headerText="N° chambre">
+                                                <h:outputText value="#{itemReser.numeroChambre}" />
+                                            </p:column>
+
+                                            <p:column headerText="Categorie">
+                                                <h:outputText value="#{itemReser.catChambre}" />
+                                            </p:column>
+
+                                            <p:column headerText="Forfait">
+                                                <h:outputText value="#{itemReser.fofChambre}" /> 
+                                            </p:column>
+
+                                            <p:column headerText="Prix">
+                                                <h:outputText value="#{itemReser.prixFofChambre}" /> 
+                                            </p:column>
+
+                                            <p:column headerText="Occupant">
+                                                <h:outputText value="#{itemReser.occupant}" /> 
+                                            </p:column>
+
+
+                                            <p:column style="width:32px;text-align: center">
+                                                <p:commandButton  oncomplete="PF('occDialog').show()" icon="ui-icon-search" title="View">
+                                                    <f:setPropertyActionListener value="#{itemReser}" target="#{allReservationBean.detailsChDto}" />
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+
+
+                                    </h:panelGrid>
+                                </p:fieldset>
+                                <p:commandButton value="Confirmer la reservation"   action="#{allReservationBean.confirmerReservation}" id="nonAjax"  ajax="false" style="text-align: center"  />
+
+                            </h:form>
+                        </div>
+
+                        <div style="clear:both"></div>
+                    </div>
+
+
+                </p:dialog>
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+        <script>
+
+            PrimeFaces.widget.Dialog.prototype.applyFocus = function () {
+                var firstInput = this.jq.find(':not(:submit):not(:button):input:visible:enabled:first');
+                if (!firstInput.hasClass('hasDatepicker')) {
+                    firstInput.focus();
+                }
+            }
+        </script>
+
+    </ui:define>
+
+</ui:composition>

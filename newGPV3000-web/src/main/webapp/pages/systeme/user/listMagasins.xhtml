@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1" header="Gestion des utilisateurs">
+                <h:form>
+                    <p:dataTable id="dataUser" var="mag" value="#{magBean.listPointdeVente}" paginator="true" rows="10" selection="#{magBean.selectedlistPointdeVente}" 
+                                 rowKey="#{mag.pvtCode}">
+                        <f:facet name="header">
+                            <p:growl id="message" showDetail="true" />
+                            <p:commandButton style="background-color: red" value="Installation Version"  actionListener="#{magBean.installVersion}" update="message">
+                                <p:confirm header="Installation Version" message="Voulez vous installer les versions des Différents magasins sélectionés" icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton style="background-color: red" value="Ajouter Magasin" onclick="PF('dlg1').show();"/>
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Valider" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="Annuler" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </f:facet>
+                        <p:column selectionMode="multiple" style="width:25px;text-align:center"/>
+                        <p:column sortBy="#{mag.pvtCode}" filterBy="#{mag.pvtCode}" >
+                            <f:facet name="header">
+                                <h:outputText value="Code Magasin" />
+                            </f:facet>
+                            <h:outputText value="#{mag.pvtCode}" />
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputText value="Nom magasin" />
+                            </f:facet>
+                            <h:outputText value="#{mag.raisonSocialFournisseur}" />
+                        </p:column>
+                        <p:column >
+                            <f:facet name="header">
+                                <h:outputText value="Adresse Relais" />
+                            </f:facet>
+                            <h:outputText value="#{mag.codeIP}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nom Directeur" />
+                            </f:facet>
+                            <h:outputText value="#{mag.nomGerant}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Téléphone magasin" />
+                            </f:facet>
+                            <h:outputText value="#{mag.phoneNumber}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="actif" />
+                            </f:facet>
+                            <h:outputText value="#{mag.actif ? 'OUI': 'NON'}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Action" />
+                            </f:facet>
+                            <p:commandButton  type="button"  value="Modifer" onclick="PF('dlg1').show();"/>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+            </p:panel>
+            <p:dialog header="Création de magasin" widgetVar="dlg1" minHeight="40" modal="true" >
+                <div class="ContainerIndent">
+                    <h:form>
+                        <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" layout="grid">
+                            <p:outputLabel value="Code Magasin:" for="codemag" />
+                            <p:inputText  id="codemag" value="#{magBean.pvtCode}" placeholder="Saisir le code magasin"  style="width: 200px"/>
+
+                            <p:outputLabel value="Nom du Magasin :" for="nomMag" />
+                            <p:inputText id="nomMag"  value="#{magBean.raisonSocialFournisseur}" placeholder="Saisir le nom du  magasin" style="width: 200px"/>
+
+                            <p:outputLabel value="Adresse IP du Relais :" for="iprelais" />
+                            <p:inputText id="iprelais"  value="#{magBean.codeIP}" placeholder="Saisir l'adresse du relais" style="width: 200px"/>
+
+                            <p:outputLabel value="Nom du directeur :" for="nomdir" />
+                            <p:inputText id="nomdir"  value="#{magBean.nomGerant}" placeholder="Saisir le nom du directeur" style="width: 200px"/>
+
+                            <p:outputLabel value="Télephone Magasin :" for="telMag" />
+                            <p:inputText id="telMag"  value="#{magBean.phoneNumber}" placeholder="Saisir le téléphone du magasin" style="width: 200px"/>
+
+                            <p:outputLabel value="Actif :" for="actifLbl" />
+                            <p:selectBooleanCheckbox id="actifLbl" value="#{magBean.actif}"/>
+
+                            <div >
+                                <p:commandButton value="Valider"  actionListener="#{magBean.save}" update="pane1"/>
+                                <p:commandButton value="Annuler"  onclick="PF('dlg1').hide();"/>
+                            </div>
+                        </p:panelGrid>
+                    </h:form>
+                </div>
+            </p:dialog>
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

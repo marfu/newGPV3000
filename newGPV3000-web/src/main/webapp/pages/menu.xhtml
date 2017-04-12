@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	template="/layout/template/template_common_logged.xhtml">
+	<ui:define name="bodyContent">
+		<c:if test="#{securityBean.logged}">
+			<h:panelGrid style="text-align: center;margin : auto;" columns="1">
+				<h:outputText style="font-size:14px;font-weight:bold" value="Tableau de bord du magasin" />
+				<h:outputText style="font-size:20px;font-weight:bold" value="#{securityBean.pvtTemp.raisonSocialFournisseur}" />
+				<br></br><br></br><br></br><br></br><br></br>
+				<h:form id="form">
+					<p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+					
+					<p:commandButton style="font-weight:bold;color:blue;width:195px;" value="RAFRAICHIR" icon="ui-icon ui-icon-refresh" update="test" ajax="false" type="submit" />
+					
+					<p:dashboard style="text-align:left;" id="board" model="#{dashboardBean.model}">
+						<p:ajax event="reorder" listener="#{dashBean.handleReorder}" update="growl" />
+						<p:panel style="width:300px;" id="reassort">
+							<p:dataList type="none" value="#{dashboardBean.listReassort}" var="cmd" id="reas" paginator="true" rows="5" effectSpeed="fast" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15">
+								<f:facet name="header">  
+               					 Commandes reassorts
+           						 </f:facet>
+								<p:column>
+									<p:commandButton icon="ui-icon-search" update=":form:reaDetail" oncomplete="reaDialog.show()" title="Voir détail">
+										<f:setPropertyActionListener value="#{cmd}" target="#{dashboardBean.selectedEBCF}" />
+									</p:commandButton>
+									<h:outputText value="#{cmd.id}, #{cmd.fournisseur.raisonSocial}" style="margin-left:10px" />
+									<br />
+								</p:column>
+							</p:dataList>
+							<p:dialog header="Détail de la commande" widgetVar="reaDialog" modal="true" showEffect="fade">
+								<p:outputPanel id="reaDetail" style="text-align:center;" layout="block">
+									<h:panelGrid columns="2" cellpadding="5">
+										<h:outputLabel for="comId" value="N# commande : " />
+										<h:outputText id="comId" value="#{dashboardBean.selectedEBCF.id}" />
+										<h:outputLabel for="obs" value="Observation: " />
+										<h:outputText id="obs" value="#{dashboardBean.selectedEBCF.observation}" />
+										<h:outputLabel for="etat" value="Etat commande: " />
+										<h:outputText id="etat" value="#{dashboardBean.selectedEBCF.etatCommande}" />
+										<h:outputLabel for="sec" value="Secteur : " />
+										<h:outputText id="sec" value="#{dashboardBean.selectedEBCF.secteur.code}, #{dashboardBean.selectedEBCF.secteur.libelle}" />
+										<h:outputLabel for="ray" value="Rayon : " />
+										<h:outputText id="ray" value="#{dashboardBean.selectedEBCF.rayon.substring(2,5)}" />
+										<h:outputLabel for="user" value="Utilisateur : " />
+										<h:outputText id="user" value="#{dashboardBean.selectedEBCF.userCreation}" />
+										<h:outputLabel for="pr" value="Valeur commande au P.R TTC.: " />
+										<h:panelGroup>
+											<h:outputText id="pr" value="#{dashboardBean.selectedEBCF.valeurPF}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="pv" value="Valeur commande au P.V TTC.: " />
+										<h:panelGroup>
+											<h:outputText id="pv" value="#{dashboardBean.selectedEBCF.valeurPV}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="marge" value="Valeur marge P.V: " />
+										<h:panelGroup>
+											<h:outputText id="marge" value="#{dashboardBean.selectedEBCF.valeurMarge}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="margeper" value="Valeur marge P.V en %: " />
+										<h:panelGroup>
+											<h:outputText id="margeper" value="#{dashboardBean.selectedEBCF.valeurMargePourcent}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:dialog>
+						</p:panel>
+						 
+						<p:panel style="width:300px;" id="ld">
+							<p:dataList type="none" value="#{dashboardBean.listLD}" var="cmd" id="ldp" paginator="true" rows="5" effectSpeed="fast" paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15">
+								<f:facet name="header">  
+               					 Commandes LD
+           						 </f:facet>
+								<p:column>
+									<p:commandButton icon="ui-icon-search" update=":form:ldDetail" oncomplete="ldDialog.show()" title="Voir détail">
+										<f:setPropertyActionListener value="#{cmd}" target="#{dashboardBean.selectedEBCF}" />
+									</p:commandButton>
+									<h:outputText value="#{cmd.id}, #{cmd.fournisseur.raisonSocial}" style="margin-left:10px" />
+									<br />
+								</p:column>
+							</p:dataList>
+							<p:dialog header="Détail de la commande" widgetVar="ldDialog" modal="true" showEffect="fade">
+								<p:outputPanel id="ldDetail" style="text-align:center;" layout="block">
+									<h:panelGrid columns="2" cellpadding="5">
+										<h:outputLabel for="comId1" value="N# commande : " />
+										<h:outputText id="comId1" value="#{dashboardBean.selectedEBCF.id}" />
+										<h:outputLabel for="obs1" value="Observation: " />
+										<h:outputText id="obs1" value="#{dashboardBean.selectedEBCF.observation}" />
+										<h:outputLabel for="etat1" value="Etat commande: " />
+										<h:outputText id="etat1" value="#{dashboardBean.selectedEBCF.etatCommande}" />
+										<h:outputLabel for="sec1" value="Secteur : " />
+										<h:outputText id="sec1" value="#{dashboardBean.selectedEBCF.secteur.libelle}, #{dashboardBean.selectedEBCF.secteur.libelle}" />
+										<h:outputLabel for="ray1" value="Rayon : " />
+										<h:outputText id="ray1" value="#{dashboardBean.selectedEBCF.rayon.libelle}" />
+										<h:outputLabel for="user1" value="Utilisateur : " />
+										<h:outputText id="user1" value="#{dashboardBean.selectedEBCF.userCreation}" />
+										<h:outputLabel for="pr1" value="Valeur commande au P.R TTC.: " />
+										<h:panelGroup>
+											<h:outputText id="pr1" value="#{dashboardBean.selectedEBCF.valeurPF}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="pv1" value="Valeur commande au P.V TTC.: " />
+										<h:panelGroup>
+											<h:outputText id="pv1" value="#{dashboardBean.selectedEBCF.valeurPV}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="marge1" value="Valeur marge P.V: " />
+										<h:panelGroup>
+											<h:outputText id="marge1" value="#{dashboardBean.selectedEBCF.valeurMarge}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+										<h:outputLabel for="margeper1" value="Valeur marge P.V en %: " />
+										<h:panelGroup>
+											<h:outputText id="margeper1" value="#{dashboardBean.selectedEBCF.valeurMargePourcent}">
+												<f:convertNumber maxFractionDigits="0" />
+											</h:outputText>
+										</h:panelGroup>
+									</h:panelGrid>
+								</p:outputPanel>
+							</p:dialog>
+						</p:panel>
+						
+					</p:dashboard>
+				</h:form>
+			</h:panelGrid>
+		</c:if>   
+		<c:if test="#{!securityBean.logged}">
+			<center>
+				<h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" />
+			</center>
+			<center>
+				<h:outputText value="ACCES NON AUTORISE  !!!" />
+			</center>
+		</c:if>
+	</ui:define>
+</ui:composition>

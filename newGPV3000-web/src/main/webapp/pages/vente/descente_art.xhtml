@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1" header="DESCENTE ARTICLE">
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Code Article :" />
+                        <h:panelGroup>
+                            <p:inputText id="inputCodeArt" value="#{venteBean.codeArticle}" label="codeArticle">
+                                <p:ajax event="blur" update="a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12" listener="#{venteBean.handleArticle}" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:outputText id="a1" value="Article : " />
+                        <h:outputText id="a2" value="#{venteBean.selectedArticle.codeArticle}" />
+                        <h:outputText id="a3" value="Désignation :" />
+                        <h:outputText id="a4" value="#{venteBean.selectedArticle.designation}" />
+                        <h:outputText id="a5" rendered="#{empty venteBean.selectedArticle.promo}"  value="P.R TTC :" />
+                        <h:outputText id="a6" rendered="#{empty venteBean.selectedArticle.promo}" value="#{venteBean.selectedArticle.prixReviensTTCEnCours}" />
+                        <h:outputText id="a7" rendered="#{empty venteBean.selectedArticle.promo}" value="P.V TTC :" />
+                        <h:outputText id="a8" rendered="#{empty venteBean.selectedArticle.promo}" value="#{venteBean.selectedArticle.prixVenteTTCEnCours}" />
+                        <h:outputText id="a9" rendered="#{not empty venteBean.selectedArticle.promo}"  value="P.R PROMO TTC :" />
+                        <h:outputText id="a10" rendered="#{not empty venteBean.selectedArticle.promo}"  value="#{venteBean.selectedArticle.prixReviensPromoTTC}" />
+                        <h:outputText id="a11" rendered="#{not empty venteBean.selectedArticle.promo}"  value="P.V PROMO TTC :" />
+                        <h:outputText id="a12" rendered="#{not empty venteBean.selectedArticle.promo}"  value="#{venteBean.selectedArticle.prixVentePromoTTC}" />
+                    </h:panelGrid>
+                    <p:commandButton value="EXECUTER" actionListener="#{venteBean.descenteArtWInstore}" />
+                </h:form>
+            </p:panel>
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

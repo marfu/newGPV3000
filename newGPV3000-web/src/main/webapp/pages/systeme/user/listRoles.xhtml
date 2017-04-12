@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1" header="Gestion des roles">
+                <h:form>
+                    <p:dataTable id="dataRole" var="role" value="#{roleBean.roles}" paginator="true" rows="10" update="@form">
+
+                        <f:facet name="header">
+                            <p:commandButton ajax="true" value="Nouveau role" actionListener="#{userBean.newUser}" update=":form" oncomplete="PF('dlg2').show();"/>
+                        </f:facet>
+                        <p:column sortBy="#{role.designation}" filterBy="#{role.designation}">
+                            <f:facet name="header">
+                                <h:outputText value="Désignation" />
+                            </f:facet>
+                            <p:commandLink immediate="true" value="#{role.designation}" action="#{roleBean.detailRole}" ajax="false" type="submit">
+                                <f:param name="roleId" value="#{role.designation}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column style="width:32px">
+                            <p:commandButton ajax="true" actionListener="#{roleBean.detailRole}" update=":form" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                <f:param name="roleId" value="#{role.designation}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+            <p:dialog id="panelFormNew" header="Creation/modification d' un role"  widgetVar="dlg2" modal="true" style="max-height:650px;overflow:auto" > 
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" />
+                     <p:message id="msgRoleName" for="roleName" />
+                    <h:panelGrid id="creaMod" columns="2">
+                        <h:outputText value="Nom du role  :*" for="roleName" />
+                        <h:panelGroup>
+                            <p:inputText id="roleName" value="#{roleBean.selectedRole.designation}" required="true">
+                                <p:ajax event="blur" update="msgRoleName" />
+                            </p:inputText>
+                        </h:panelGroup>
+                       
+                        <h:outputText value="Permissions  :*" for="roleName" />
+
+
+
+                        <p:tree value="#{roleBean.root1}"  selectionMode="checkbox" var="node" dynamic="true" selection="#{roleBean.selectedNodes1}">
+                             <p:ajax event="expand" update="" listener="#{roleBean.onNodeExpand}" />
+                            <p:ajax event="collapse" update="" listener="#{roleBean.onNodeCollapse}" />
+                            <p:ajax event="select" update="" listener="#{roleBean.onNodeSelect}" />
+                            <p:ajax event="unselect" update="" listener="#{roleBean.onNodeUnselect}" />
+
+                            
+                            <p:treeNode>
+                                <h:outputText value="#{node.name}" />
+                            </p:treeNode>
+                        </p:tree>
+                    </h:panelGrid>
+
+                    <p:commandButton type="submit" action="#{roleBean.saveRole(roleBean.selectedNodes1)}" value="Sauvegarde/M.A.J" update="@form" />
+                    <p:commandButton  style="float: right" value="Annuler" oncomplete="PF('passwordReini').hide();" />
+
+                </h:form>
+            </p:dialog>
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

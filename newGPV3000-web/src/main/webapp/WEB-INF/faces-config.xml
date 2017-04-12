@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    
+    <name>GPV3000</name>
+    
+    <component>
+        <component-type>org.primefaces.component.SentinelMenu</component-type>
+        <component-class>org.primefaces.sentinel.component.menu.SentinelMenu</component-class>
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.SentinelMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.sentinel.component.menu.SentinelMenuRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>changePassword</from-outcome>
+            <to-view-id>/pages/systeme/user/changePassword.xhtml</to-view-id>
+        </navigation-case>
+       
+        
+        <navigation-case>
+            <from-outcome>datatables</from-outcome>
+            <to-view-id>/pages/datatable.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>success-login</from-outcome>
+            <to-view-id>/dashboard.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>dashboard</from-outcome>
+            <to-view-id>/dashboard.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>disconnect-login</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+        
+      
+        
+      
+        
+        
+        <!-- Mouvement -->
+        
+        
+        <!-- Inventaire -->
+        
+        
+        
+        
+        <!-- Système -->
+       
+        <navigation-case>
+            <from-outcome>listUsers</from-outcome>
+            <to-view-id>/pages/systeme/user/listUsers.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>reservation</from-outcome>
+            <to-view-id>/reservation.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>reservations</from-outcome>
+            <to-view-id>/reservations.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>confirmation</from-outcome>
+            <to-view-id>/confirmation.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>chambre</from-outcome>
+            <to-view-id>/chambre.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>offresTarifaires</from-outcome>
+            <to-view-id>/offresTarifaires.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>categorieChambre</from-outcome>
+            <to-view-id>/categorieChambre.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>service</from-outcome>
+            <to-view-id>/service.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>services</from-outcome>
+            <to-view-id>/services.xhtml</to-view-id>
+        </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>article</from-outcome>
+            <to-view-id>/article.xhtml</to-view-id>
+        </navigation-case>
+        
+         
+        <navigation-case>
+            <from-outcome>serviceParent</from-outcome>
+            <to-view-id>/serviceParent.xhtml</to-view-id>
+        </navigation-case>
+        
+        
+        <navigation-case>
+            <from-outcome>offreTarifaire</from-outcome>
+            <to-view-id>/offreTarifaire.xhtml</to-view-id>
+        </navigation-case>
+        
+         <navigation-case>
+            <from-outcome>chambreOccupes</from-outcome>
+            <to-view-id>/chambreOccupes.xhtml</to-view-id>
+        </navigation-case>
+         
+         
+        <navigation-case>
+            <from-outcome>listRoles</from-outcome>
+            <to-view-id>/pages/systeme/user/listRoles.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>listPermissions</from-outcome>
+            <to-view-id>/pages/systeme/user/listPermissions.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>paramMouvementStatDem</from-outcome>
+            <to-view-id>/pages/systeme/param/paramMouvementStatDem.xhtml</to-view-id>
+        </navigation-case>
+        
+        <!-- Statistique -->
+        
+
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/categorieChambre.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{categorieChambreBean.creerCategorieChambre}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/categorieChambre.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/chambre.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{chambreBean.creerChambre}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/chambre.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/offreTarifaire.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{tOffreTarifaireBean.creerTOffreTarifaire}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/offreTarifaire.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/service.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{serviceBean.creerTService}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/service.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>/confirmation.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{allReservationBean.confirmerReservation}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/confirmation.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>/confirmation.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{allReservationBean.annulerReservation}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/confirmation.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+    
+    
+    
+</faces-config>

@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <div class="ContainerIndent">
+            <p:panel>
+                <div class="ContainerIndent">
+                    <h:form id="form">
+                        <p:dataTable value="#{JobList.jobs}" var="item" paginator="true"
+                                     rows="10" id="jobList">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Job ID"/>
+                                </f:facet>
+                                <p:commandButton  action="#{JobMBean.setSelectedJob(item)}" value="#{item.jobId}"></p:commandButton>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nom "/>
+                                </f:facet>
+                                <h:outputText value="#{item.jobName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Type de traitement"/>
+                                </f:facet>
+                                <h:outputText value="#{item.jobClassName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Date début"/>
+                                </f:facet>
+                                <h:outputText value="#{item.startDateStr}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Date fin"/>
+                                </f:facet>
+                                <h:outputText value="#{item.endDateStr}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="prochaine échéance"/>
+                                </f:facet>
+                                <h:outputText value="#{item.nextTimeoutStr}"/>
+                            </p:column>
+                            
+                        </p:dataTable>
+                        <br/>
+                        <h:commandButton action="#{JobMBean.gotoNew}" value="Nouvelle Tache"/>
+                        <div class="EmptyBox20"></div>
+
+                    </h:form>
+                </div>
+            </p:panel>
+
+            <div class="EmptyBox20"></div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

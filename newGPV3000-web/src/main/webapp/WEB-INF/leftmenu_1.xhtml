@@ -1,0 +1,157 @@
+<html dir="ltr"><head></head><body contenteditable="true">
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ps="http://primefaces.org/sentinel" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+            <div id="layout-menubar" class="Unselectable fontRegular">
+                <div class="layout-menubarinner-box" id="buttonArea">
+                    <a href="#" id="layout-menubar-resize" class="BordRad3" title="Menu Resize"><i class="icon-th-list-2"></i></a>
+                    <a href="#" id="layout-menubar-resize2" class="BordRad3" title="Open Menu"><i class="icon-menu"></i></a>
+                </div>
+
+                <h:form id="menuform">
+                    <p:growl id="growl" showDetail="true" globalOnly="true" sticky="true" />
+                    <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" style="z-index: 2 !important">
+                        <h:panelGrid columns="1">
+                            <h:outputText style="color:red;font-size:18px;" value="Action en cours, veuillez Patienter ...." />
+                            <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                        </h:panelGrid>
+                    </p:dialog>
+                    <ps:menu id="sm_leftmenu" >
+                        <p:menuitem id="sm_dashboard" value="Accueil" icon="icon-home-outline" outcome="dashboard" containerStyleClass="layout-menubar-active"/>
+                        <p:submenu rendered="#{securityBean.hasPermission('Fichier')}" label="Fichier" icon="icon-doc-text-inv">
+                            <p:submenu rendered="#{securityBean.hasPermission('Article')}" label="Article" icon=" icon-database-1">							
+                                <p:menuitem rendered="#{securityBean.hasPermission('ArticleRecherche')}" value="Recherche" icon="icon-search-2" outcome="articleSearch" />
+                            </p:submenu>
+                            <p:submenu rendered="#{securityBean.hasPermission('Fournisseur')}" label="Fournisseur" icon="icon-doc-text-inv">
+                                <p:menuitem rendered="#{securityBean.hasPermission('FournisseurRecherche')}" value="Recherche" icon="icon-search-2" outcome="fournisseurSearch"  />
+                                <p:menuitem rendered="#{securityBean.hasPermission('FournisseurRecap')}" value="Edition Recap" icon="icon-print" outcome="formFournisseurRecapCMD"  />
+                            </p:submenu>
+                            <p:submenu rendered="#{securityBean.hasPermission('Promotion')}" label="Promotion" icon="icon-tags">
+                                <p:menuitem rendered="#{securityBean.hasPermission('PromotionRecherche')}" value="Recherche" icon="icon-search-2" outcome="formPromoSearch"  />
+                                <p:menuitem rendered="#{securityBean.hasPermission('PromotionEdition')}" value="Edition Promo en cours" icon="icon-print" ajax="false" action="#{promoBean.printEdition}" />
+                            </p:submenu>
+                        </p:submenu>
+                        <p:submenu rendered="#{securityBean.hasPermission('Commande')}" label="Commande" icon="icon-basket">
+                            <p:submenu rendered="#{securityBean.hasPermission('CommandeReassort')}"  label="Réassort" icon="icon-table">
+                                <p:menuitem rendered="#{securityBean.hasPermission('CommandeReassortEdittionCadencier')}" value="Edition Cadencier Reassort"  icon="icon-print" outcome="editionCadencierReassort" />
+                                <p:submenu rendered="#{securityBean.hasPermission('CommandeReassortSaisie')}" label="Saisie"  icon="icon-keyboard">
+                                    <p:menuitem rendered="#{securityBean.hasPermission('CommandeReassortSaisieCadencier')}" value="Commande par cadencier"  icon="icon-calendar-2" outcome="formSaisieClassCadencierReassort" />
+                                    <p:menuitem rendered="#{securityBean.hasPermission('CommandeReassortSaisieRapide')}" value="Commande rapide" ajax="false"  icon="icon-forward" action="#{commandeReassort.rapide}" />
+                                </p:submenu>
+                                <p:menuitem rendered="#{securityBean.hasPermission('CommandeReassortGestion')}" value="Gestion" ajax="false" icon="icon-tasks" action="#{bonCommandeFournisseurBean.reassort}" />
+                                <p:menuitem  rendered="#{securityBean.hasPermission('CommandeReassortTransmettre')}" value="Transmettre" ajax="false" icon="icon-reply-2" action="#{bonCommandeFournisseurBean.transmettre}" ></p:menuitem>
+                            </p:submenu>
+
+                            <p:submenu rendered="#{securityBean.hasPermission('CommandeLD')}" label="Livraison Directe" icon="icon-table">
+                                <p:menuitem  rendered="#{securityBean.hasPermission('CommandeLDSaisie')}" value="Saisie LD" icon="icon-keyboard" outcome="formSaisieFournisseurCadencierLD" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('CommandeLDGestion')}" value="Gestion" icon="icon-tasks" ajax="false" action="#{bonCommandeFournisseurBean.listeDesld}" />
+                                <p:submenu rendered="#{securityBean.hasPermission('CommandeLDTransmission')}" label="Transmission" icon="icon-reply-2">
+                                    <p:menuitem rendered="#{securityBean.hasPermission('CommandeLDTransmissionTransmettre')}" value="Transmettre des commandes" icon="icon-reply-2" outcome="listEBCF" />
+                                    <p:menuitem rendered="#{securityBean.hasPermission('CommandeLDTransmissionHisto')}" value="Historique de transmission" icon="icon-history" outcome="listHistos" />
+                                </p:submenu>
+                                <p:menuitem rendered="#{securityBean.hasPermission('CommandeLDCadencier')}" value="Cadensier fournisseur" icon="icon-calendar" outcome="formFournisseurCadencier" />
+                            </p:submenu>
+
+                            <p:submenu rendered="#{securityBean.hasPermission('CommandeSuggestion')}" label="Suggestion" icon="icon-bookmark-1">
+                                <p:menuitem rendered="#{securityBean.hasPermission('CommandeSuggestion')}" value="Suggestion de commandes" icon="icon-bookmark-1" ajax="false" action="#{commandeBean.reinit}" />
+                            </p:submenu>
+
+                            <p:menuitem rendered="#{securityBean.hasPermission('CommandeEdition')}" value="Edition de commandes" icon="icon-print" action="#{bonCommandeFournisseurBean.all}" ajax="false" />
+                        </p:submenu>
+                        <p:submenu rendered="#{securityBean.hasPermission('stock')}"  label="Stock" icon="icon-cubes">
+                            <p:submenu rendered="#{securityBean.hasPermission('stockMouvement')}" label="Mouvement" icon="icon-cubes">
+                                <p:menuitem rendered="#{securityBean.hasPermission('stockMouvementRecherche')}" value="Recherche multi-critères" icon="icon-search" outcome="formMouvementSearch" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('stockMouvementVisualiser')}"  value="Visualiser mouvements" icon="icon-eye" ajax="false" action="#{mouvementBean.viewMvts}" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('stockMouvementSaisie')}" value="Saisie mouvement" icon="icon-keyboard" outcome="formMouvementSaisie" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('stockMouvementEdition')}" value="Edition" icon="icon-print" outcome="formMouvementRecap" />
+                            </p:submenu>						
+                        </p:submenu>
+                        <p:submenu rendered="#{securityBean.hasPermission('Inventaire')}"  label="Inventaire" icon="icon-list-alt">
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireCreation')}"  value="Création" icon="icon-newspaper"  ajax="false" action="#{inventaireBean.newInv}" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireGestion')}"  value="Gestion" icon="icon-tasks"  outcome="listInventaires" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireMAJ')}"  value="Mise a jour" icon="fa fa-refresh"  outcome="fromInvUpdate" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireEdition')}"  value="Edition" icon="icon-edit" outcome="formInvEtat" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireCloture')}"  value="Cloture" outcome="formInvCloture" icon="icon-ellipsis-vert"/>
+                            <p:menuitem rendered="#{securityBean.hasPermission('InventaireImpression')}"  value="Impression" icon="icon-print"  outcome="formInvPrint" />
+                        </p:submenu>
+
+                        <p:submenu  rendered="#{securityBean.hasPermission('sa')}" label="Echange S.A"  icon="icon-exchange">
+                            <p:menuitem rendered="#{securityBean.hasPermission('saRemontee')}" value="Remontée des ventes" outcome="remonteVente"  icon="icon-upload-1"  />
+                            <p:menuitem rendered="#{securityBean.hasPermission('saDescenteQuotidienne')}" ajax="true" value="Descente quotidienne des prix en caisse" icon="icon-download-1"   actionListener="#{saBean.descenteQuotidienne}" update="growl" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('saDescenteExcep')}" value="Descente exceptionnelle des prix en caisse" icon="icon-download-2"  outcome="descente_art" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('saEditionRemonte')}" value="Edition remontée des ventes" icon="icon-edit" update="growl" ajax="false" actionListener="#{venteBean.printRemonteVente}" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('saCA')}" value="Edition chriffre d'affaire" icon="icon-edit"  outcome="editionCA" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('saDescenteGlobale')}" value="Descente Globale des Prix" icon="icon-download-outline"  outcome="descente_hebdomadaire" update="growl"/>
+                        </p:submenu>
+
+                        <p:submenu rendered="#{securityBean.hasPermission('Facture')}" label="Facture" icon="icon-ticket">
+                            <p:menuitem rendered="#{securityBean.hasPermission('FactureIntegration')}" value="Integration facture" icon="icon-link-ext"  outcome="factureAuto" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('FactureVisualisation')}" value="Visualisation Factures" icon="icon-eye" outcome="formMouvementFact" />
+                        </p:submenu>
+                        <p:submenu rendered="#{securityBean.hasPermission('Version')}" label="Version" icon="icon-database">
+                            <p:menuitem rendered="#{securityBean.hasPermission('VersionIntegration')}" value="Intégration version" icon="icon-link-ext" outcome="versionPage" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('VersionEdition')}" value="Edition version" icon="icon-print" ajax="false" actionListener="#{exploitationBean.printVersion}" update="growl" />
+                        </p:submenu>
+
+                        <p:submenu rendered="#{securityBean.hasPermission('Systeme')}"   label="Système" icon="icon-sun">
+                            <p:submenu label="Paramétrage" icon="icon-wrench">
+                                <p:menuitem value="Fichier commande" icon="icon-waves"  outcome="fichierCommande" />
+                                <p:menuitem value="Tache demarrage" outcome="exploitationPage" icon="icon-waves"/>
+                                <p:menuitem value="Envoi Facture" outcome="facturePage" icon="icon-waves"/>
+                            </p:submenu>
+                            <p:menuitem id="sm_dscheduler" value="Taches planifiées" icon="icon-stopwatch" outcome="JobList" />
+                            <p:submenu label="Reprise de Données" icon="icon-sun">
+                                <p:menuitem value="Gisement" outcome="rddGisement" icon="icon-th-outline"/>
+                                <p:menuitem value="Code Barre" outcome="rddGencode" icon="icon-barcode"/>
+                                <p:menuitem value="Stock" outcome="rddStock" icon="icon-cubes"/>
+                            </p:submenu>
+                            <p:submenu label="Gestion des Magasins" icon="icon-users">
+                                <p:menuitem value="Utilisateurs" outcome="listUsers" icon="icon-user"/>
+                                <p:menuitem value="Roles" outcome="listRoles" icon="icon-vcard"/>
+                                <p:menuitem value="Permissions" outcome="listPermissions" icon="icon-lock-open"/>
+                                <p:menuitem value="Magasins" outcome="listMagasins" icon="icon-building"/>
+                                <p:menuitem  icon="fa-cogsfa-cogs" value="Paramétrage statdem" outcome="paramMouvementStatDem"/>
+                            </p:submenu>
+                        </p:submenu>
+
+                        <p:submenu rendered="#{securityBean.hasPermission('Statistique')}" label="Statistique" icon="icon-chart-bar">
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionStockDLV')}" value="Edition stock DLV Stock DLV" icon="icon-edit" outcome="formStockDLVPrint"  />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionStockZero')}" value="Edition Stock à Zéro" icon="icon-edit" outcome="formArticleStockZero" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionNonVendus')}" value="Edition Non Vendus" icon="icon-edit" outcome="formArticleNonVendu"  />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueRCond')}" value="R/COND" ajax="false" icon="icon-gauge" action="#{pluBean.populateRcond}" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueDLV')}" value="DLV" ajax="false" icon="icon-gauge" action="#{pluBean.populateDlvm}" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueStatDem')}" value="STATDEM" icon="icon-gauge"  outcome="formMouvementStatDem" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueHitParade')}" value="Hit-Parade" icon="icon-sort-alt-down" outcome="formHitParade" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionRecapDemiGros')}" value="Edition Récap Mvnt demi-gros" icon="icon-edit" outcome="formRecapMvntDemiGros" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionRecapOrigine')}" value="Edition Récap Mvnt par origine et type" icon="icon-edit" outcome="formRecapMvntOrigineType" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('StatistiqueEditionSoldeDemarques')}" value="Edition Solde démarques" icon="icon-edit" outcome="formRecapMvntSoldeDem" />
+                        </p:submenu>
+
+                        <p:submenu rendered="#{securityBean.hasPermission('Gisement')}"  label="Gisement" icon="icon-th-outline">
+                            <p:submenu rendered="#{securityBean.hasPermission('GisementSaisie')}" label="Saisie" icon="icon-keyboard">
+                                <p:menuitem rendered="#{securityBean.hasPermission('GisementSaisieLot')}" value="Par lot" icon="icon-th-outline" outcome="saisieGisement" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('GisementSaisieArticle')}" value="Par article" icon="icon-th-outline" outcome="saisieGisementArticle" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('GisementSaisieFichier')}" value="Par fichier" icon="icon-th-outline" outcome="saisieGisementFichier" />
+                            </p:submenu>
+                            <p:menuitem rendered="#{securityBean.hasPermission('GisementEdition')}" value="Edition" icon="icon-print" outcome="editionGisement" />
+                        </p:submenu>
+
+                        <p:submenu rendered="#{securityBean.hasPermission('Gencode')}" label="Gencode" icon="icon-barcode">
+                            <p:menuitem rendered="#{securityBean.hasPermission('GencodeAjoutGencode')}" icon="icon-barcode"  value="Ajout Gencode" outcome="formGenCodeNew" />
+                            <p:menuitem rendered="#{securityBean.hasPermission('GencodeReintegration')}" icon="icon-barcode"  value="Réintégration" outcome="reintegrationSoldeArticle"  />
+                            <p:submenu rendered="#{securityBean.hasPermission('GencodeImpression')}" label="Impression" icon="icon-print">
+                                <p:menuitem rendered="#{securityBean.hasPermission('GencodeImpressionArticle')}" value="Article" outcome="impressionCBArticle" icon="icon-plus-squared-alt" />
+                                <p:menuitem rendered="#{securityBean.hasPermission('GencodeImpressionClassif')}" value="Promo/Classif/Gisement" outcome="impressionCBVersion" icon="icon-plus-squared-alt"/>
+                            </p:submenu>
+                            <p:menuitem rendered="#{securityBean.hasPermission('GencodeRecherche')}" value="Recherche" outcome="formGenCodeSearch"  icon="icon-plus-squared-alt"/>
+                            <p:menuitem   rendered="#{securityBean.hasPermission('GencodePLU')}" icon="icon-plus-squared-alt" value="CREATION PLU/DLV" outcome="formGenCodeNew2" />
+                        </p:submenu>
+                        <p:submenu rendered="#{securityBean.hasPermission('Finances')}" label="Finances" icon="icon-money">
+                            <p:menuitem  value="Chiffre d'affaire" outcome="caSearchPeriode" icon="icon-plus-squared-alt"/>
+                        </p:submenu>
+                    </ps:menu>
+                </h:form>
+            </div>
+
+        </ui:composition>
+    </body></html>

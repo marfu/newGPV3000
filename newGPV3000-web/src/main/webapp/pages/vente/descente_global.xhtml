@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <p:panel id="pane1">
+                <h:form>
+                    <p:panelGrid id="grid">
+                        <f:facet name="header">
+                            <p:row>
+                                <center>
+                                    <p:column colspan="4">Descente  vers les caisses</p:column>
+                                </center>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="2">Description</p:column>
+                                <p:column colspan="2">Action</p:column>
+                            </p:row>
+                        </f:facet>
+
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="Déscente vers les caisses des promo en cours  (descente partiel)" />
+                            </p:column>
+                            <p:column colspan="2">
+                                <p:commandButton value="EXECUTER" actionListener="#{venteBean.descentePromoWInstore}" /> 
+                            </p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="Déscente vers les caisses des articles mis à jour (descente partiel)" />
+                            </p:column>
+                            <p:column colspan="2">
+                                <p:commandButton value="EXECUTER" actionListener="#{venteBean.descenteUpdateWInstore}" />
+                            </p:column>
+                        </p:row> 
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="Déscente vers les caisses de tout les articles (descente global)" />
+                            </p:column>
+                            <p:column colspan="2">
+                                <p:commandButton value="EXECUTER" actionListener="#{venteBean.descenteGlobalWInstore}" />
+                            </p:column> 
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="2">
+                                <h:outputText value="Déscente vers les caisses de tout les articles avec remise à zero des fichiers winstore  (descente global)" />
+                            </p:column>
+                            <p:column colspan="2">
+                                <p:commandButton onclick="confirmation3.show()" value="EXECUTER" />
+                                <p:confirmDialog message="Voulez vous confirmer la remise a zero des caisses, attention ne pas executer durant les heures d' ouverture du magasin." header="Confirmation" severity="alert" widgetVar="confirmation3">
+                                    <p:commandButton value="Valider" oncomplete="confirmation3.hide()" type="submit" actionListener="#{venteBean.descenteResetWInstore}" />
+                                    <p:commandButton value="annuler" onclick="confirmation3.hide()" type="button" />
+                                </p:confirmDialog>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </p:panel>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

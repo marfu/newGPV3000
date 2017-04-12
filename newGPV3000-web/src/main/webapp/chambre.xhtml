@@ -1,0 +1,154 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Paramétrage" url="#" />
+                    <p:menuitem value="Type election" url="#" />
+                </p:breadCrumb>
+                <div class="EmptyBox20"></div>
+
+                <f:view>
+                    <div>
+                        <div style="float:left">
+                            <h:panelGrid columns="1" cellpadding="5">
+
+
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{chambreBean.clearEntity}" onclick="PF('dlg2').show();"/>
+
+
+                            </h:panelGrid>
+                        </div>
+
+                    </div>
+                    <h:form id="form">
+                        <p:dataTable var="item" value="#{chambreBean.listTChambre}" id="grid" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+
+
+
+
+                            <p:column headerText="Libelle">
+                                <h:outputText value="#{item.chLib}" />
+                            </p:column>
+                            <p:column headerText="Numero Chambre">
+                                <h:outputText value="#{item.chNumeroChambre}" />
+                            </p:column>
+                            <p:column headerText="Categorie">
+                                <h:outputText value="#{item.chCategorie.catChambreDesc}" />
+                            </p:column>
+
+                              <p:column style="width:32px">
+                                  <p:commandButton ajax="true" actionListener="#{chambreBean.detailChambre}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                      <f:param name="userId" value="#{item.chId}" />
+                                </p:commandButton>
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </h:form>
+                    <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" >
+
+
+                        <f:view>
+                            <h:form id="myform">
+
+                                <p:messages autoUpdate="true"/>
+
+                                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+
+
+                                    <h:outputLabel value="Libelle:" for="Libelle" />
+                                    <p:inputText id="Libelle" value="#{chambreBean.tchambre.chLib}" title="Libelle" required="true" label="Libellé"/>
+
+
+                                    <h:outputLabel value="Numero Chambre:" for="NumeroChambre" />
+                                    <p:inputText id="NumeroChambre" value="#{chambreBean.tchambre.chNumeroChambre}" title="Numero Chambre" required="true" label="Numero Chambre"/>
+
+                                     <h:outputLabel value="Categorie :" for="categorie" />
+                                     <p:selectOneMenu value="#{chambreBean.idcategorie}" required="true" label="Niveau hierachie">  
+                                        <f:selectItem itemLabel="Selectioner une hierachie" itemValue="" />  
+                                        <f:selectItems value="#{categorieChambreBean.listTCategorieChambre}" var="tag1"
+                                                       itemLabel="#{tag1.catChambreLib}" itemValue="#{tag1.catChambreId}"/>  
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+
+                                <p:commandButton value="Valider" update="grid" icon="ui-icon-check" validateClient="true" style="margin-right:10px" action="#{chambreBean.creerUpdateChambre}"/>
+
+                            </h:form>
+
+                        </f:view>
+
+                    </p:dialog>   
+                    <!--Modification-->
+
+                </f:view>
+
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+
+           
+
+
+            <p:panel id="pane1" header="Gestion des utilisateurs">
+                <h:form>
+                    <p:dataTable id="dataUser" var="usr" value="#{userBean.users}" paginator="true" rows="10">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Login" />
+                            </f:facet>
+                            <p:commandLink immediate="true" value="#{usr.userName}" action="#{userBean.detailUser}" ajax="false" type="submit">
+                                <f:param name="userId" value="#{usr.userName}" />
+                            </p:commandLink>
+                        </p:column>
+                        <p:column sortBy="#{usr.familyName}" filterBy="#{usr.familyName}">
+                            <f:facet name="header">
+                                <h:outputText value="Nom de famille" />
+                            </f:facet>
+                            <h:outputText value="#{usr.familyName}" />
+                        </p:column>
+                        <p:column sortBy="#{usr.firstName}" filterBy="#{usr.firstName}">
+                            <f:facet name="header">
+                                <h:outputText value="Prenom" />
+                            </f:facet>
+                            <h:outputText value="#{usr.firstName}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Departement" />
+                            </f:facet>
+                            <h:outputText value="#{usr.departement}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:panel>
+            <p:panel id="panelFormNew" header="Creation/modification d' un utilisateur">
+                <h:form id="form">
+                    <p:commandButton ajax="true" value="Nouvel utilisateur" actionListener="#{userBean.newUser}" update="@form" />
+                    <h:panelGrid id="creaMod" columns="3">
+                        <h:outputText value="Nom d' utilisateur  :*" for="userName" />
+                        <h:panelGroup>
+                            <p:inputText id="userName" value="#{userBean.selectedUser.userName}" required="true">
+                                <p:ajax event="blur" update="msgUserName" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgUserName" for="userName" />
+                        <h:outputText value="email :" for="email" />
+                        <h:panelGroup>
+                            <p:inputText id="email" value="#{userBean.selectedUser.email}">
+                                <p:ajax event="blur" update="msgEmail" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgEmail" for="email" />
+                        <h:outputText value="Nom de famille :" for="familyName" />
+                        <h:panelGroup>
+                            <p:inputText id="familyName" value="#{userBean.selectedUser.familyName}">
+                                <p:ajax event="blur" update="msgFamilyName" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgFamilyName" for="familyName" />
+                        <h:outputText value="Prénom :*" for="firstName" />
+                        <h:panelGroup>
+                            <p:inputText id="firstName" value="#{userBean.selectedUser.firstName}">
+                                <p:ajax event="blur" update="msgFirstName" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgFirstName" for="firstName" />
+                        <h:outputText value="Mot de passe :" for="password" />
+                        <h:panelGroup>
+                            <p:inputText id="password" value="#{userBean.selectedUser.password}">
+                                <p:ajax event="blur" update="msgPassword" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgPassword" for="password" />
+                        <h:outputText value="Département :*" for="departement" />
+                        <h:panelGroup>
+                            <p:inputText id="departement" value="#{userBean.selectedUser.departement}">
+                                <p:ajax event="blur" update="msgDepartement" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgDepartement" for="departement" />
+                        <h:outputText value="Matricule :*" for="matricule" />
+                        <h:panelGroup>
+                            <p:inputText id="matricule" value="#{userBean.selectedUser.matricule}">
+                                <p:ajax event="blur" update="msgMatricule" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgMatricule" for="matricule" />
+
+                        <h:outputText value="Alerte sur les commandes passées depuis :" for="alerte" />
+                        <h:panelGroup>
+                            <p:inputText id="alerte" value="#{userBean.selectedUser.alerte}">
+                                <p:ajax event="blur" update="msgAlerte" />
+                            </p:inputText>
+                        </h:panelGroup>
+                        <p:message id="msgAlerte" for="alerte" />
+
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Actif : " />
+                        <h:selectBooleanCheckbox value="#{userBean.selectedUser.enable}" />
+                        <h:outputText value="Roles :" />
+                        <h:panelGroup style="width:50%;">
+                            <p:pickList value="#{userBean.roles}" var="role" converter="roleConverter" itemLabel="#{role.designation}" itemValue="#{role}" addLabel="Ajouté" addAllLabel="Ajouté tout" removeLabel="Retiré" removeAllLabel="Retiré tout">
+                                <f:facet name="sourceCaption">Role(s) disponible</f:facet>
+                                <f:facet name="targetCaption">Role(s) selectionné(s)</f:facet>
+                            </p:pickList>
+                        </h:panelGroup>
+                        <h:outputText value="Magasins :" />
+                        <h:panelGroup>
+                            <p:pickList addLabel="Ajouté" addAllLabel="Ajouté tout" removeLabel="Retiré" removeAllLabel="Retiré tout" value="#{userBean.pvts}" var="pvt" converter="posConverter" itemLabel="#{pvt.raisonSocialFournisseur}" itemValue="#{pvt}">
+                                <f:facet name="sourceCaption">Magasin(s) disponible</f:facet>
+                                <f:facet name="targetCaption">Magasin(s) selectionné(s)</f:facet>
+                            </p:pickList>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <p:commandButton type="submit" action="#{userBean.saveUser}" value="Sauvegarde/M.A.J" update="@form" />
+                </h:form>
+            </p:panel>
+        </c:if><c:if test="#{!securityBean.logged}"><center><h:graphicImage value="/resources/img/stop.png" url="/resources/img/stop.png" /></center><center><h:outputText value="ACCES NON AUTORISE  !!!"/></center></c:if>
+    </ui:define>
+</ui:composition>

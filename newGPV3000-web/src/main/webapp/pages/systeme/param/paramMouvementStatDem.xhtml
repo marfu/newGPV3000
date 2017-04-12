@@ -1,0 +1,111 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="content">
+        <c:if test="#{securityBean.logged}">
+            <p:growl id="growl" showDetail="true" globalOnly="true" autoUpdate="true" />
+            <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText style="color:red;font-size:18px;" value="Chargement en cours ...." />
+                    <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                </h:panelGrid>
+            </p:dialog>
+            <center>
+                <p:panel id="searchPane">
+                    <h:form id="form">
+                        <p:panelGrid id="grid" style="margin-top:20px">
+                            <f:facet name="header">
+                                <p:row>
+                                    <p:column colspan="8">Paramétrage de l'édition des statistiques de démarques</p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column colspan="4">Type(s) Mouvements</p:column>
+                                    <p:column colspan="4">Colonnes StatDem</p:column>
+                                </p:row>
+                            </f:facet>
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:pickList id="idLiv"
+                                                value="#{paramTypeMvtStatDemBean.filtreLivrer}" var="liv"
+                                                converter="mouvementStockConverter" itemLabel="#{liv.code}"
+                                                itemValue="#{liv}">
+                                        <f:facet name="sourceCaption">Mvt(s) disponible</f:facet>
+                                        <f:facet name="targetCaption">Qté Livrée</f:facet>
+                                    </p:pickList>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8" styleClass="ui-widget-header">
+                                    <p:spacer height="0" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:pickList id="idCass"
+                                                value="#{paramTypeMvtStatDemBean.filtreCasse}" var="casse"
+                                                converter="mouvementStockConverter" itemLabel="#{casse.code}"
+                                                itemValue="#{casse}">
+                                        <f:facet name="sourceCaption">Mvt(s) disponible</f:facet>
+                                        <f:facet name="targetCaption">Qté Casse</f:facet>
+                                    </p:pickList>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8" styleClass="ui-widget-header">
+                                    <p:spacer height="0" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8">
+                                    <p:pickList id="idDem"
+                                                value="#{paramTypeMvtStatDemBean.filtreDemarq}" var="demarq"
+                                                converter="mouvementStockConverter" itemLabel="#{demarq.code}"
+                                                itemValue="#{demarq}">
+                                        <f:facet name="sourceCaption">Mvt(s) disponible</f:facet>
+                                        <f:facet name="targetCaption">Qté Démarque</f:facet>
+                                    </p:pickList>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8" styleClass="ui-widget-header">
+                                    <p:spacer height="0" />
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="8">
+                                    <center>
+                                        <p:commandButton style="color:blue;" id="raf"
+                                                         value="Rafraichir" icon="ui-icon ui-icon-refresh"
+                                                         action="#{paramTypeMvtStatDemBean.rafraichir}" ajax="false"
+                                                         type="submit" />
+
+                                        <p:commandButton id="sav" value="Sauvegarder"
+                                                         icon="ui-icon ui-icon-disk"
+                                                         action="#{paramTypeMvtStatDemBean.save}" ajax="false"
+                                                         type="submit" />
+                                    </center>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+            </center>
+        </c:if>
+        <c:if test="#{!securityBean.logged}">
+            <center>
+                <h:graphicImage value="/resources/img/stop.png"
+                                url="/resources/img/stop.png" />
+            </center>
+            <center>
+                <h:outputText value="ACCES NON AUTORISE  !!!" />
+            </center>
+        </c:if>
+    </ui:define>
+</ui:composition>

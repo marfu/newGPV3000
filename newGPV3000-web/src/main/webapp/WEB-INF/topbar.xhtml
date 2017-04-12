@@ -1,0 +1,40 @@
+<ui:composition 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:form>
+
+        <div id="layout-header" class="Unselectable fontRegular">
+            <a href="dashboard.xhtml" id="layout-logo">
+                <h:graphicImage name="images/LOGO.svg" styleClass="Fleft" library="sentinel-layout"/>
+                <span class="Fs19 FontTitilliumSemiBoldItalic Fleft"><span class="softblue">Hotel</span><span class="hardblue">Nov</span></span>
+            </a>
+            <ul id="sm-topmenu" class="layout-header-widgets white Fs14">
+                <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-user-male"></i>
+                    <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                        <li class="Animated05"><a class="white Unselectable"><i class="icon-user-male Fs26 OvHidden"></i><span class="Fs18"><h:outputText value="#{securityBean.userName}" /><br/>
+                                    <span class="Fs10">Dernière Connexion - 
+                                        <h:outputText value="#{securityBean.userTemp.dateDerniereConnexion}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+                                        </h:outputText></span></span></a></li>
+                        <li class="Animated05"><i class="icon-users-2"></i><h:commandLink class="white Unselectable" value="Modifier mot de passe" action="#{securityBean.changePassword()}" /></li>
+                    </ul>
+                </li>
+                <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-bell"></i><span class="alertBubble BordRad10 Fs9">24</span>
+                </li>
+                <li class="Fleft BordRadHalf TexAlCenter"><i class="icon-power"></i>
+                    <ul class="layout-header-widgets-submenu BordRad5 shadows white Animated05">
+                        <li class="Animated05"> <i class="icon-logout"></i> <h:commandLink class="white Unselectable" value="Se déconnecter" action="#{securityBean.logout()}" /></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- NEVER REMOVE FOLLOWING 'UL' TAG ! BECAUSE THIS CONTAINS RESPONSIVE MODE HEADER MENU OPEN-CLOSE BUTTON -->
+            <ul id="sm-mobiletopmenu" class="layout-header-widgets white Fs14">
+                <li class="Fleft BordRadHalf TexAlCenter Animated05 DisplayOnResponsive"><i class="icon-th-1"></i></li>
+            </ul>
+            <!-- ****** -->
+        </div>
+    </h:form>
+</ui:composition>

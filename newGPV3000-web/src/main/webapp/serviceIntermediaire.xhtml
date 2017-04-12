@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+
+                <div class="EmptyBox20"></div>
+
+
+                <h:form id="form" >
+                    <p:tabView var="str" value="#{serviceBean.listTServiceIntermediaire}" id="view">
+                        <p:ajax event="tabChange" listener="#{serviceBean.onTabChange(str.sceId)}"/>
+                        <p:tab id="tabDet" title=" #{str.sceNom}" >
+                            
+                            <p:dataTable id="comDetTable" rowIndexVar="var" var="detCom" value="#{serviceBean.listTServiceTerminal}">
+                            
+                           
+                            
+                            <p:column style="text-align:right" headerText="Nom">
+
+                                <h:outputText value="#{detCom.sceNom}">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="text-align:right" headerText="P.R.U TTC">
+                                <h:outputText value="#{detCom.scePrix}">
+                                    <f:convertNumber integerOnly="true" />
+                                </h:outputText>
+                            </p:column>
+                                
+                            
+                           
+                        </p:dataTable>
+                        </p:tab>
+                    </p:tabView>
+            </h:form>      
+
+
+               
+
+                <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" ></p:dialog>
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

@@ -1,0 +1,134 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Tableau de bord" url="#" />
+                </p:breadCrumb>
+                                <div class="EmptyBox20"></div>
+            <div style="width: 40%;margin: auto;padding: auto">
+                
+            <h:form id="form">
+                <h:panelGrid columns="3" cellpadding="10">
+                    <h:panelGrid>
+                        <p:outputLabel for="popup" value="Date Debut:" />
+                        <p:calendar id="popup" value="#{reservationBean.dateDebut}" />
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:outputLabel for="popup2" value="Date fin" />
+                        <p:calendar id="popup2" value="#{reservationBean.dateFin}" />
+                    </h:panelGrid>
+
+                    <h:panelGrid>
+                        <p:outputLabel  value="" />
+                        <p:commandButton value="Rafraichir" id="ajax" update="formDetails" actionListener="#{reservationBean.rechercher}" styleClass="ui-priority-primary" />
+
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+</div>
+            <h:form id="formDetails">
+                <div class="ContainerIndent">
+
+                    <div class="EmptyBox20"></div>
+                    <ui:repeat var="str" value="#{reservationBean.dtoAll}" id='listViewDetailChambre'>
+                        <h:panelGroup>
+
+
+
+                            <div class="Container25 Responsive">
+                                <div class="ContainerIndent">
+                                    <p:panel style="min-height: 250px;">
+                                        <div class="Container">
+                                            <i class="icon-home Fs50 Fleft Wid25 red TexAlCenter"></i>
+                                            <div class="Fs24 Fright MarTop10 leaden Wid70">#{str.typeChambre}</div>
+                                            <div class="Fs18 Fright leaden Wid70">Nombre de chambres : <span class="red">#{str.totalChambre}</span></div>
+                                            <div class="EmptyBox10"></div>
+                                            <p:separator styleClass="Wid100"></p:separator>
+                                            <div class="EmptyBox10"></div>
+                                            <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive">Libres<br/><span class="Fs20 orange">#{str.totalChambreLibre}</span></div>
+                                            <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive">Reservées<br/><span class="Fs20 orange">#{str.totalChambreReserve}</span></div>
+                                            <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive">Occupées<br/><span class="Fs20 red">#{str.totalChambreOccupe}</span></div>
+                                            <div class="Fs12 Fright leaden Wid50 TexAlCenter Responsive">Hors-service<br/><span class="Fs20 hardblue">#{str.totalHorsService}</span></div>
+                                            <div class="EmptyBox10"></div>
+                                            <!--                                            <p:separator styleClass="Wid100"></p:separator>
+                                                                                        <a href="#" class="DispInlBlock Fs14 Fright MarRight10"><i class="icon-doc-1 orange"> Get Full Report</i></a>-->
+                                        </div>
+                                    </p:panel>
+                                </div>
+                            </div>
+
+
+                        </h:panelGroup>
+                    </ui:repeat>
+
+
+                    <div class="EmptyBox10"></div>
+                </div>
+            </h:form>
+            <div class="EmptyBox10"></div>
+
+            <h:form>
+                <p:growl id="growl" life="2000" />
+
+                <p:commandButton value="Reserver" id="nonAjax" actionListener="#{buttonView.buttonAction}" ajax="false" />
+
+            </h:form>
+
+        </div>
+
+
+
+
+    </ui:define>
+
+</ui:composition>

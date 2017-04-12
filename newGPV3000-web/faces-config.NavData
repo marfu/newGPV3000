@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="404.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="pages/vente/formStatVentesPromo.xhtml" x="2400" y="1050" zoom="true"/>
+        <Node id="file.xhtml" x="2400" y="600" zoom="true"/>
+        <Node id="pages/systeme/user/listUsers.xhtml" x="650" y="1200" zoom="true"/>
+        <Node id="pages/menu.xhtml" x="1150" y="600" zoom="true"/>
+        <Node id="dashboard.xhtml" x="1400" y="150" zoom="true"/>
+        <Node id="font-icons.xhtml" x="1400" y="1050" zoom="true"/>
+        <Node id="documentation.xhtml" x="2900" y="600" zoom="true"/>
+        <Node id="pages/vente/descente_global.xhtml" x="650" y="1350" zoom="true"/>
+        <Node id="pages/vente/editionCA.xhtml" x="400" y="1650" zoom="true"/>
+        <Node id="messages.xhtml" x="2400" y="450" zoom="true"/>
+        <Node id="sample.xhtml" x="150" y="1800" zoom="true"/>
+        <Node id="empty-page.xhtml" x="650" y="150" zoom="true"/>
+        <Node id="index.html" x="900" y="900" zoom="true"/>
+        <Node id="access-denied.xhtml" x="1900" y="1050" zoom="true"/>
+        <Node id="pages/systeme/user/listPermissions.xhtml" x="2900" y="150" zoom="true"/>
+        <Node id="rechercheArticle.xhtml" x="1650" y="1200" zoom="true"/>
+        <Node id="pages/vente/descente_art.xhtml" x="1900" y="750" zoom="true"/>
+        <Node id="menu.xhtml" x="1900" y="900" zoom="true"/>
+        <Node id="formArticleSearch.xhtml" x="3150" y="750" zoom="true"/>
+        <Node id="pages/systeme/user/listRoles.xhtml" x="400" y="1200" zoom="true"/>
+        <Node id="error.xhtml" x="1650" y="1500" zoom="true"/>
+        <Node id="charts.xhtml" x="1900" y="600" zoom="true"/>
+        <Node id="promotion-page.xhtml" x="2650" y="600" zoom="true"/>
+        <Node id="*" x="3001" y="231" zoom="true"/>
+        <Node id="pages/formArticleSearch.xhtml" x="2900" y="900" zoom="true"/>
+        <Node id="pages/vente/remonteVente.xhtml" x="650" y="300" zoom="true"/>
+        <Node id="overlay.xhtml" x="150" y="2100" zoom="true"/>
+        <Node id="forms.xhtml" x="900" y="1500" zoom="true"/>
+        <Node id="pages/datatable.xhtml" x="1126" y="2222" zoom="true"/>
+        <Node id="misc.xhtml" x="3400" y="300" zoom="true"/>
+        <Node id="login.xhtml" x="2150" y="450" zoom="true"/>
+        <Node id="panel.xhtml" x="1400" y="1650" zoom="true"/>
+        <Node id="pages/systeme/param/paramMouvementStatDem.xhtml" x="1650" y="150" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

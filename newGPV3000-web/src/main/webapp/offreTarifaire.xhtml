@@ -1,0 +1,138 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                
+                <div class="EmptyBox20"></div>
+
+                <f:view>
+                    <div>
+                        <div style="float:left">
+                            <h:panelGrid columns="1" cellpadding="5">
+
+
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{tOffreTarifaireBean.clearEntity}" onclick="PF('dlg2').show();"/>
+
+
+                            </h:panelGrid>
+                        </div>
+
+                    </div>
+                    <h:form id="form">
+                        <p:dataTable var="item" value="#{tOffreTarifaireBean.listTOffreTarifaire}" id="grid" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+
+
+
+
+                            <p:column headerText="Titre">
+                                <h:outputText value="#{item.offTitre}" />
+                            </p:column>
+                           
+
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" actionListener="#{tOffreTarifaireBean.detailOffre}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                    <f:param name="userId" value="#{item.offreId}" />
+                                </p:commandButton>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+                    <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" >
+
+
+                        <f:view>
+                            <h:form id="myform">
+
+                                <p:messages autoUpdate="true"/>
+
+                                <h:panelGrid id="grid" columns="2" cellpadding="5">
+
+
+
+                                    <h:outputLabel value="Titre :" for="Titre" />
+                                    <p:inputText id="Titre" value="#{tOffreTarifaireBean.toffreTarifaire.offTitre}" title="Titre" required="true" label="Titre"/>
+
+
+                                    
+
+                                    
+                                </h:panelGrid>
+
+                                <p:commandButton value="Valider" update="grid" icon="ui-icon-check" validateClient="true" style="margin-right:10px" action="#{tOffreTarifaireBean.creerUpdateTOffreTarifaire}"/>
+
+                            </h:form>
+
+                        </f:view>
+
+                    </p:dialog>   
+                    <!--Modification-->
+
+                </f:view>
+
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

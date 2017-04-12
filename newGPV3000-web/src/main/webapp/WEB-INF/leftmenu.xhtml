@@ -1,0 +1,53 @@
+<html dir="ltr"><head></head><body contenteditable="true">
+        <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ps="http://primefaces.org/sentinel" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+
+            <div id="layout-menubar" class="Unselectable fontRegular">
+                <div class="layout-menubarinner-box" id="buttonArea">
+                    <a href="#" id="layout-menubar-resize" class="BordRad3" title="Menu Resize"><i class="icon-th-list-2"></i></a>
+                    <a href="#" id="layout-menubar-resize2" class="BordRad3" title="Open Menu"><i class="icon-menu"></i></a>
+                </div>
+
+                <h:form id="menuform">
+                    <p:growl id="growl" showDetail="true" globalOnly="true" sticky="true" />
+                    <p:ajaxStatus onstart="PF('statusDialog').show();" onsuccess="PF('statusDialog').hide();" />
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" style="z-index: 2 !important">
+                        <h:panelGrid columns="1">
+                            <h:outputText style="color:red;font-size:18px;" value="Action en cours, veuillez Patienter ...." />
+                            <p:graphicImage value="/resources/img/ajaxloadingbar.gif" />
+                        </h:panelGrid>
+                    </p:dialog>
+                    <ps:menu id="sm_leftmenu">
+                        <p:menuitem id="sm_dashboard" value="Accueil" icon="icon-home-outline" outcome="dashboard" containerStyleClass="layout-menubar-active"/>
+
+                        <p:submenu    label="Reservations" icon="icon-calendar">
+                            <p:menuitem value="Reservation" outcome="reservations" icon="icon-calendar"/>
+                            <p:menuitem value="Gestion des réservations" outcome="confirmation" icon="icon-book"/>
+                        </p:submenu>
+                        <p:menuitem  value="Facturation" icon="icon-book" outcome="serviceParent" />
+                        <p:menuitem  value="chambreOccupes" icon="icon-book" outcome="chambreOccupes" />
+
+                        <p:submenu label="Gestion des chambres" icon="icon-book">
+                            <p:menuitem value="Chambres" outcome="chambre" icon="icon-book"/>
+                            <p:menuitem  value="Offres tarifaires" icon="icon-money" outcome="offreTarifaire" />
+                        </p:submenu>
+                        <p:submenu label="Parametres" icon="icon-cog-alt">
+                            <p:menuitem value="Categorie chambres" outcome="categorieChambre" icon="icon-folder-empty-1"/>
+                            <p:menuitem  value="Service" icon="icon-cog" outcome="service" />
+                            <p:menuitem  value="Articles" icon="icon-book" outcome="article" />
+
+
+                        </p:submenu>
+                        <p:submenu label="Securité" icon="icon-users">
+                            <p:menuitem value="Utilisateurs" outcome="listUsers" icon="icon-user"/>
+                            <p:menuitem value="Roles" outcome="listRoles" icon="icon-vcard"/>
+                            <p:menuitem value="Permissions" outcome="listPermissions" icon="icon-lock-open"/>
+
+                        </p:submenu>
+
+
+                    </ps:menu>
+                </h:form>
+            </div>
+
+        </ui:composition>
+    </body></html>
