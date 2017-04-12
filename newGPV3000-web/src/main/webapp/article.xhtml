@@ -68,7 +68,6 @@
 
                             </h:panelGrid>
                         </div>
-
                     </div>
 
                     <p:dataTable var="item" value="#{articleBean.listTArticle}" id="grid" paginator="true"
@@ -96,14 +95,12 @@
                             </p:commandButton>
                         </p:column>
 
-                      
+
 
 
                     </p:dataTable>
 
                     <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" >
-
-
                         <f:view>
                             <h:form id="myform">
 
@@ -116,20 +113,20 @@
                                     <h:outputLabel value="Nom :" for="Nom" />
                                     <p:inputText id="Nom" value="#{articleBean.tarticle.artNom}" title="Nom" required="true" label="Nom"/>
 
-                                    
+
                                     <h:outputLabel value="Prix :" for="Prix" />
                                     <p:inputText id="Prix" value="#{articleBean.tarticle.artPrix}" title="Prix" required="true" label="Prix"/>
 
-       
+
 
                                     <h:outputLabel value="Service :" for="Parent" />
                                     <p:selectOneMenu value="#{articleBean.idservice}" label="Service" required="true">  
                                         <f:selectItem itemLabel="Selectioner un Service" itemValue="0" />  
-                                        <f:selectItems value="#{serviceBean.listAllTServiceIntermediaire}" var="tag1"
+                                        <f:selectItems value="#{serviceBean.listTService}" var="tag1"
                                                        itemLabel="#{tag1.sceNom}" itemValue="#{tag1.sceId}"/>  
                                     </p:selectOneMenu>
-                                    
-                                    
+
+
                                     <h:outputLabel value="Taux(%) :" for="Taux" />
                                     <p:inputText id="Taux" value="#{articleBean.tarticle.artTaux}" title="Taux" required="true" label="Taux"/>
 
@@ -143,12 +140,12 @@
                         </f:view>
 
                     </p:dialog>   
-                   
-            
+
+
                 </f:view>
 
 
-                
+
             </div>
         </div>
 

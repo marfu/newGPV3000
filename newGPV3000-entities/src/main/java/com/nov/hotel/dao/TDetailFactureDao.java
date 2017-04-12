@@ -7,6 +7,7 @@ package com.nov.hotel.dao;
 
 
 import com.nov.hotel.entities.TDetailFacture;
+import java.util.List;
 
 
 
@@ -17,5 +18,5 @@ import com.nov.hotel.entities.TDetailFacture;
  * @author manukey
  */
 public interface TDetailFactureDao extends GenericDao<TDetailFacture>{
-    
+    public List<TDetailFacture> findTDetailFactureByFacture(long id);
 }

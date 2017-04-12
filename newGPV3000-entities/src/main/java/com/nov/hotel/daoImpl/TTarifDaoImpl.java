@@ -29,4 +29,32 @@ public class TTarifDaoImpl extends GenericDaoImpl<TTarif> implements TTarifDao {
 
         return results;
     }
+
+    
+     @Override
+    public TTarif createOrUpdate(TTarif u) {
+        
+        TTarif temp = getTTarif(u.getTarifId());
+        if (temp != null) {
+            em.merge(u);
+            em.flush();
+            return u;
+        } else {
+            em.persist(u);
+            return u;
+        }
+    }
+    
+    
+    @Override
+	public TTarif getTTarif(long id) {
+		try {
+			TTarif u = em.find(TTarif.class, id);
+//			if (u.getPvt() != null)
+//				u.getPvt().size();
+			return u;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

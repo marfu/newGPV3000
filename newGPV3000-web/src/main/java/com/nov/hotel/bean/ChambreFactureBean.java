@@ -9,6 +9,7 @@ import ci.prosumagpv.web.bean.security.SecurityBean;
 import com.nov.hotel.dto.ChambreOccupeDto;
 import com.nov.hotel.entities.EtatChambreEnum;
 import com.nov.hotel.entities.EtatFactureEnum;
+import com.nov.hotel.entities.TArticle;
 import com.nov.hotel.entities.TChambre;
 import com.nov.hotel.entities.TChambreReservation;
 import com.nov.hotel.entities.TClient;
@@ -18,6 +19,7 @@ import com.nov.hotel.entities.TModePaiment;
 import com.nov.hotel.entities.TOccupation;
 import com.nov.hotel.entities.TRemise;
 import com.nov.hotel.entities.TService;
+import com.nov.hotel.services.TArticleService;
 import com.nov.hotel.services.TChambreReservationService;
 import com.nov.hotel.services.TChambreService;
 import com.nov.hotel.services.TClientService;
@@ -81,6 +83,8 @@ public class ChambreFactureBean implements Serializable {
     
     @EJB
     private TModePaiementService tModePaiementService;
+    @EJB
+    private TArticleService tArticleService;
     
     private List<TOccupation> chambreOccupation;
     
@@ -370,9 +374,11 @@ public class ChambreFactureBean implements Serializable {
         String dateToString = format.format(date);
         
         fac.setNumFacture("F-" + dateToString + "-" + lastIdN);
-        fac = tFactureService.CreerTFacture(fac);
         TClient cli = tClientService.findById(clientId);
         fac.setClient(cli);
+        fac = tFactureService.CreerTFacture(fac);
+        
+        
         TModePaiment modPaie = tModePaiementService.findTModePaimentById(modePaiementId);
         fac.setModePaiement(modPaie);
         for (ChambreOccupeDto str : chambreOccupeDto) {
@@ -384,10 +390,13 @@ public class ChambreFactureBean implements Serializable {
             detailsFac.setDfactDateCreate(new Date());
             detailsFac.setDfactPrix(str.getPrix());
             TService tS = tServiceService.findByLibService("HEBERGEMENT");
-            TService tSConso = tServiceService.findByLibService("CHAMBRE");
             //TService tSConso = tServiceService.findByLibService("CHAMBRE");
+            TArticle tSConso = tArticleService.findByLibArticle("CHAMBRE");
             detailsFac.setService(tS);
-            detailsFac.setServiceConsoId(tSConso);
+            //detailsFac.setServiceConsoId(tSConso);
+            detailsFac.setArticleConsoId(tSConso);
+            detailsFac.setFacture(fac);
+            
             //detailsFac.setArticleConsoId(articleConsoId);
             tDetailFactureService.CreerTDetailFacture(detailsFac);
             

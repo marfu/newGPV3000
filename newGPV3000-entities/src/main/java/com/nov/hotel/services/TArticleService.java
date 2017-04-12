@@ -45,6 +45,11 @@ public class TArticleService {
       return tArticleDao.findById(ID);
        
     }
+    public TArticle findByLibArticle(String ID) {
+        
+      return tArticleDao.findByLibArticle(ID);
+       
+    }
     
 
     public void deleteTService() {

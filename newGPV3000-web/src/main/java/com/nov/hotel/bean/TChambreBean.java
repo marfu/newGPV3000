@@ -6,7 +6,6 @@
 package com.nov.hotel.bean;
 
 import com.nov.hotel.entities.EtatChambreEnum;
-import com.nov.hotel.entities.TCategorieChambre;
 import com.nov.hotel.entities.TChambre;
 import com.nov.hotel.services.TCategorieChambreService;
 import com.nov.hotel.services.TChambreService;
@@ -83,7 +82,7 @@ public class TChambreBean implements Serializable {
         System.out.println("getChLib "+ tchambre.getChLib());
         System.out.println("getChNumeroChambre "+ tchambre.getChNumeroChambre());
 
-        if (String.valueOf(tchambre.getChId()) != null) {
+        if (tchambre.getChId() != 0) {
             tchambre.setChDateModif(today);
         } else {
             tchambre.setEtat(EtatChambreEnum.LIBRE);
@@ -121,6 +120,7 @@ public class TChambreBean implements Serializable {
     
       public void clearEntity() {
         tchambre = new TChambre();
+        idcategorie=0;
     }
 
 }

@@ -6,8 +6,6 @@
 package com.nov.hotel.daoImpl;
 
 import com.nov.hotel.dao.TArticleDao;
-import com.nov.hotel.entities.TService;
-import com.nov.hotel.dao.TServiceDao;
 import com.nov.hotel.entities.TArticle;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -51,14 +49,14 @@ public class TArticleDaoImpl extends GenericDaoImpl<TArticle> implements TArticl
         List result = null;
 
         try {
-//            Query q = em.createQuery("SELECT s FROM T_SERVICE s WHERE s.TSCE_PARENT_ID is null");
-//Query q = em.createQuery("SELECT b FROM Bureau b Where b.hierachie_id= ?2");
+
             Query q = em.createQuery("SELECT s FROM TService s WHERE s.sceParentId = "+ id);
-//            q.setParameter(2, id);
+
             
             result = q.getResultList();
         } catch (NoResultException e) {
             // log.debug("No result forund for... ");        }        return result;    }
+            System.out.println(e.getMessage());
         }
 
         return result;
@@ -75,7 +73,7 @@ public class TArticleDaoImpl extends GenericDaoImpl<TArticle> implements TArticl
             
             result = q.getResultList();
         } catch (NoResultException e) {
-          
+          System.out.println(e.getMessage());
         }
 
         return result;
@@ -104,4 +102,19 @@ public class TArticleDaoImpl extends GenericDaoImpl<TArticle> implements TArticl
 		} catch (Exception e) {
 			return null;
 		} }
-}
+
+    @Override
+    public TArticle findByLibArticle(String lib) {
+     TArticle result =new TArticle();
+         try {
+
+            Query q = em.createQuery("SELECT s FROM TArticle s WHERE s.artNom =:code ");
+            q.setParameter("code", lib).setMaxResults(1);
+            
+            result = (TArticle) q.getSingleResult();
+        } catch (NoResultException e) {
+          
+        }
+
+        return result;
+}}

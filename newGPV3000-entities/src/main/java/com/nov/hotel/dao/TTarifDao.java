@@ -19,4 +19,7 @@ import com.nov.hotel.entities.TTarif;
 public interface TTarifDao extends GenericDao<TTarif>{
     
     public TTarif findTarifByCatAndOffre(long idOffre,long idCat);
+    public TTarif createOrUpdate(TTarif u);
+
+    public TTarif getTTarif(long id);
 }

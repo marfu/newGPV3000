@@ -92,7 +92,11 @@ public class TReservationDaoImpl extends GenericDaoImpl<TReservation> implements
 
     @Override
     public TReservation getLastReservation() {
-        TReservation results = (TReservation) em.createQuery("SELECT cr FROM TReservation cr  ORDER BY cr.resId DESC").setMaxResults(1).getSingleResult();
+        TReservation results= new TReservation();
+        try {
+            results = (TReservation) em.createQuery("SELECT cr FROM TReservation cr  ORDER BY cr.resId DESC").setMaxResults(1).getSingleResult();
+        } catch (NoResultException nre) {
+        }
         return results;
     }
 }

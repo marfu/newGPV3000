@@ -7,6 +7,7 @@ package com.nov.hotel.services;
 
 import com.nov.hotel.dao.TTarifDao;
 import com.nov.hotel.entities.TTarif;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -26,5 +27,19 @@ public class TTarifService {
         return tTarifDao.findTarifByCatAndOffre(idOffre, idCat);
 
     }
+     
+       public List<TTarif> findAllOffreTarifaire() {
+        return tTarifDao.findAll();
+    }
+     
+      public TTarif CreerOrUpdate(TTarif c) {
+        
+      return tTarifDao.createOrUpdate(c);
+       
+    }
+       public TTarif findOffreTarifaireByID(long id) {
+        return tTarifDao.findById(id);
+    }
+     
     
 }

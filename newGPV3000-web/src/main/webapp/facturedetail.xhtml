@@ -1,0 +1,155 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+
+
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+
+                <div class="EmptyBox20"></div>
+
+                <f:view>
+                    <div>
+
+
+                    </div>
+                    <h:form>
+                        <p:dataTable var="item" value="#{facturedtoBean.listfatureDto}" id="grid" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15">
+
+                            <p:column headerText="Date de création">
+                                <h:outputText value="#{item.factDateCreate}" />
+                            </p:column>
+
+
+
+                            <p:column headerText="Numero Facture">
+                                <h:outputText value="#{item.numFacture}" />
+                            </p:column>
+
+                            <p:column headerText="Nom client">
+                                <h:outputText value="#{item.client.cliNom} #{item.client.cliPrenom}" />
+                            </p:column>
+
+                            <p:column headerText="Prix">
+                                <h:outputText value="#{item.prix}" />
+                            </p:column>
+
+
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" action="#{facturedtoBean.detailFacturef}" update=":myform" oncomplete="PF('dlgSservice').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                    <f:param name="factureID" value="#{item.factId}" />
+                                </p:commandButton>
+                            </p:column>
+
+
+
+
+                        </p:dataTable>
+
+                    </h:form>
+                    <!--Sous Service-->
+                    <p:dialog header="Détail facture " widgetVar="dlgSservice" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="800" >
+
+
+                        <f:view>
+                            <h:form id="myform">
+
+                                <p:messages autoUpdate="true"/>
+
+                                <p:dataTable var="items" value="#{facturedtoBean.listTdetailFacture}" id="grid" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15">
+
+                                    <p:column headerText="Service" >
+                                        <h:outputText value="#{items.service.sceNom}" />
+                                    </p:column>
+                                    <p:column headerText="Service consommée" >
+                                        <h:outputText value="#{items.articleConsoId.artNom}" />
+                                    </p:column>
+
+                                    <p:column headerText="qté consommée" >
+                                        <h:outputText value="#{items.dfactQte}" />
+                                    </p:column>
+                                    <p:column headerText="prix" >
+                                        <h:outputText value="#{items.dfactPrix}" />
+                                    </p:column>
+                                    <p:column headerText="Modifié par" >
+                                        <h:outputText value="#{items.userModif}" />
+                                    </p:column>
+
+
+
+                                </p:dataTable>
+                            </h:form>
+
+                        </f:view>
+
+                    </p:dialog> 
+
+
+                </f:view>
+
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+
+
+    </ui:define>
+
+
+
+</ui:composition>

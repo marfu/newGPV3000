@@ -71,4 +71,9 @@ public class TOccupationDaoImpl extends GenericDaoImpl<TOccupation> implements T
 
        return result;    }
 
+    @Override
+    public TOccupation findOccupationByFact(long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

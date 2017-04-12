@@ -44,7 +44,7 @@ public class TFactureDaoImpl extends GenericDaoImpl<TFacture> implements TFactur
             
             tFacture= (TFacture) q.getSingleResult();
         } catch (NoResultException e) {
-          
+          System.out.println(e.getMessage());
         }
 
        return tFacture;
@@ -64,7 +64,7 @@ public class TFactureDaoImpl extends GenericDaoImpl<TFacture> implements TFactur
             
             
         } catch (NoResultException e) {
-          
+          System.out.println(e.getMessage());
         }
 
        return result;    }

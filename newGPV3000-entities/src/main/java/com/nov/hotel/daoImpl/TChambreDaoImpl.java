@@ -11,7 +11,6 @@ import com.nov.hotel.dto.InfoChambreDto;
 import com.nov.hotel.entities.EtatChambreEnum;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;

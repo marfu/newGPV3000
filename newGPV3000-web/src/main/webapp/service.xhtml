@@ -63,7 +63,7 @@
                             <h:panelGrid columns="1" cellpadding="5">
 
 
-                                <p:commandButton value="Ajouter" type="button" actionListener="#{serviceBean.clearEntity}" onclick="PF('dlg2').show();"/>
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{serviceBean.clearEntity}" update=":myform" onclick="PF('dlg2').show();"/>
 
 
                             </h:panelGrid>
@@ -105,7 +105,7 @@
 
                                 <p:messages autoUpdate="true"/>
 
-                                <h:panelGrid id="grid" columns="2" cellpadding="5">
+                                <h:panelGrid id="gridformajout" columns="2" cellpadding="5">
 
 
 
@@ -132,7 +132,7 @@
                     </p:dialog>   
                     <!--Modification-->
                     <!--Sous Service-->
-                    <p:dialog header="Service " widgetVar="dlgSservice" modal="true" height="auto" >
+                    <p:dialog header="Service " widgetVar="dlgSservice" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="800" >
 
 
                         <f:view>
@@ -144,7 +144,7 @@
                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15">
 
-                                    <p:column headerText="Nom">
+                                    <p:column headerText="Nom" >
                                         <h:outputText value="#{items.sceNom}" />
                                     </p:column>
 
@@ -152,7 +152,6 @@
 
                                     <p:column style="width:32px">
                                         <p:commandButton ajax="true" actionListener="#{serviceBean.detailService}" update=":myform2 :myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
-
                                             <f:param name="userIds" value="#{items.sceId}" />
                                         </p:commandButton>
                                     </p:column>

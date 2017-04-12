@@ -65,10 +65,19 @@ public class TTarif implements Serializable{
 		TTARIF_PRIX = tTARIF_PRIX;
 	}
 
-	@Override
-	public String toString() {
-		return "TTarif [offre=" + offre + ", chCategorie=" + chCategorie + ", TTARIF_PRIX=" + TTARIF_PRIX + "]";
-	}
+    public long getTarifId() {
+        return tarifId;
+    }
 
+    public void setTarifId(long tarifId) {
+        this.tarifId = tarifId;
+    }
+
+    @Override
+    public String toString() {
+        return "TTarif{" + "tarifId=" + tarifId + ", offre=" + offre + ", chCategorie=" + chCategorie + ", TTARIF_PRIX=" + TTARIF_PRIX + '}';
+    }
+
+	
 
 }

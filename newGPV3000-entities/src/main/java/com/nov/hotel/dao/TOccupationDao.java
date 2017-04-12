@@ -26,4 +26,5 @@ public interface TOccupationDao extends GenericDao<TOccupation>{
       
        public List<TOccupation> listTOccupation();
        
+       public TOccupation findOccupationByFact(long id);
 }

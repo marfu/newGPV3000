@@ -80,6 +80,10 @@
             <to-view-id>/confirmation.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>tarif</from-outcome>
+            <to-view-id>/tarif.xhtml</to-view-id>
+        </navigation-case>
+         <navigation-case>
             <from-outcome>chambre</from-outcome>
             <to-view-id>/chambre.xhtml</to-view-id>
         </navigation-case>
@@ -135,7 +139,10 @@
             <from-outcome>paramMouvementStatDem</from-outcome>
             <to-view-id>/pages/systeme/param/paramMouvementStatDem.xhtml</to-view-id>
         </navigation-case>
-        
+        <navigation-case>
+            <from-outcome>factureDetail</from-outcome>
+            <to-view-id>/facturedetail.xhtml</to-view-id>
+        </navigation-case>
         <!-- Statistique -->
         
 
@@ -154,9 +161,19 @@
     <navigation-rule>
         <from-view-id>/chambre.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{chambreBean.creerChambre}</from-action>
+            <from-action>#{chambreBean.creerUpdateChambre}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/chambre.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+     <navigation-rule>
+        <from-view-id>/tarif.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{tarifBean.creerUpdateTTarif}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/tarif.xhtml</to-view-id>
             <redirect/>
         </navigation-case>   
 
@@ -164,7 +181,7 @@
     <navigation-rule>
         <from-view-id>/offreTarifaire.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{tOffreTarifaireBean.creerTOffreTarifaire}</from-action>
+            <from-action>#{tOffreTarifaireBean.creerUpdateTOffreTarifaire}</from-action>
             <from-outcome>success</from-outcome>
             <to-view-id>/offreTarifaire.xhtml</to-view-id>
             <redirect/>
@@ -206,7 +223,16 @@
         </navigation-case>   
 
     </navigation-rule>
-    
-    
+    <navigation-rule>
+        <from-view-id>/article.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{articleBean.creerArticle}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/article.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>   
+
+    </navigation-rule>
+   
     
 </faces-config>

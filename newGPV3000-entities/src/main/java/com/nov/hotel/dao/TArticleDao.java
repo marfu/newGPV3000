@@ -22,6 +22,8 @@ public interface TArticleDao extends GenericDao<TArticle>{
     public List<TArticle> findServiceParent();
     public List<TArticle> findServiceIntermediaire(long id);
     public List<TArticle> findServiceTerminal(long id);
-      public TArticle createOrUpdate(TArticle u);         
+      public TArticle createOrUpdate(TArticle u); 
+      
+       public TArticle findByLibArticle(String u);         
      public TArticle getTArticle(long id);
 }

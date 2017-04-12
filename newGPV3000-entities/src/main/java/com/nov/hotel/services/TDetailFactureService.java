@@ -46,6 +46,10 @@ public class TDetailFactureService {
         return tDetailFactureDao.findAll();
 
     }
+      public List<TDetailFacture> listTDetailFactureByFacture(long id) {
+        return tDetailFactureDao.findTDetailFactureByFacture(id);
+
+    }
 
     public TDetailFacture findByIDTDetailFacture(long ID) {
         return tDetailFactureDao.findById(ID);
