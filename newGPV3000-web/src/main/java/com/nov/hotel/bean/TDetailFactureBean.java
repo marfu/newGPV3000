@@ -179,7 +179,7 @@ public class TDetailFactureBean implements Serializable {
     // fonction et methode
     public String creerTDetailFacture() {
        Date today =new Date();
-        tDetailFacture.setdFactDateCreate(dFactDateCreate);
+        tDetailFacture.setDfactDateCreate(dFactDateCreate);
         tDetailFactureService.CreerTDetailFacture(tDetailFacture);
         
         return "success";

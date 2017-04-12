@@ -49,6 +49,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
 
 /**
@@ -89,6 +90,8 @@ public class AllReservationBean implements Serializable {
 
     @EJB
     private TServiceService tServiceService;
+    
+    private List<TChambre> listChambreLibre;
 
     private TClient clientOcc = new TClient();
 
@@ -230,6 +233,16 @@ public class AllReservationBean implements Serializable {
         this.detailsChDto = detailsChDto;
     }
 
+    public List<TChambre> getListChambreLibre() {
+        return listChambreLibre= tChambreService.listChambreByEtat(EtatChambreEnum.LIBRE);
+    }
+
+    public void setListChambreLibre(List<TChambre> listChambreLibre) {
+        this.listChambreLibre = listChambreLibre;
+    }
+
+    
+    
     public void detailReservation() {
         occupantDto = new ArrayList<>();
 
@@ -346,7 +359,7 @@ public class AllReservationBean implements Serializable {
         dto.setIdfofChambre(toffr.getOffreId());
         dto.setPrixFofChambre(tTarif.getTTARIF_PRIX());
         dto.setNumeroChambre(chambreDetails.getChNumeroChambre());
-
+ listChambresDto.remove(dto);
         listChambresDto.add(dto);
 
         System.out.println("xxxxxxxxxxxxx");
@@ -509,9 +522,9 @@ public class AllReservationBean implements Serializable {
                 TDetailFacture detailsFac = new TDetailFacture();
                // detailsFac.setFacture(fac);
                 detailsFac.setUserModif(userName);
-                detailsFac.setdFactQte(1);
-                detailsFac.setdFactDateCreate(new Date());
-                detailsFac.setdFactPrix(idCategorieChambre);
+                detailsFac.setDfactQte(1);
+                detailsFac.setDfactDateCreate(new Date());
+                detailsFac.setDfactPrix(idCategorieChambre);
                 TService tS = tServiceService.findByLibService("HEBERGEMENT");
                 TService tSConso = tServiceService.findByLibService("CHAMBRE");
                 detailsFac.setService(tS);
@@ -558,6 +571,17 @@ public class AllReservationBean implements Serializable {
         reservation = new TReservation();
 
         chambreDetails = new TChambre();
+    }
+    
+    
+    public void loadChambreLibre() {
+         
+         
+         System.out.println("xxxxxxxxx===========");
+         listChambreLibre = tChambreService.listChambreByEtat(EtatChambreEnum.LIBRE);
+          System.out.println("xxxxxxxxx==========="+ listChambreLibre.size());
+       RequestContext context =RequestContext.getCurrentInstance();
+         context.execute("PF('carDialog').show();");
     }
 
 }

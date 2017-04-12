@@ -61,20 +61,20 @@
                             </p:commandButton>
                         </p:column>
                         <p:column style="width:32px">
-                          
 
-                                <p:commandButton  icon="ui-icon fa fa-trash" update="grid" rendered="#{item.statut == 'NON_CONFIRMEE' }" style="color:white" actionListener="#{allReservationBean.annulerReservation(item.idReservation)}" >
-                                    <p:confirm header="Annuler reservation" message="Are you sure?" icon="ui-icon-alert" />
+
+                            <p:commandButton  icon="ui-icon fa fa-trash" update="grid" rendered="#{item.statut == 'NON_CONFIRMEE' }" style="color:white" actionListener="#{allReservationBean.annulerReservation(item.idReservation)}" >
+                                <p:confirm header="Annuler reservation" message="Are you sure?" icon="ui-icon-alert" />
+                            </p:commandButton>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" >
+                                    <f:param name="chId" value="#{item.idReservation}" />
                                 </p:commandButton>
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
 
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" >
-                                        <f:param name="chId" value="#{item.idReservation}" />
-                                    </p:commandButton>
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                                </p:confirmDialog>
 
-                         
                         </p:column>
 
 
@@ -88,7 +88,7 @@
                 <p:dialog header="Ajouter une chambre" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="600" >
                     <h:form id="chambreChoose">
                         <p:fieldset legend="Liste des chambres disponibles" style="margin-bottom:20px">
-                            <p:dataTable var="item" id="testDT" value="#{reservationBean.listChambreLibre}" scrollable="true" scrollHeight="200" selection="#{reservationBean.chambreDetails}" rowKey="#{item.chId}">
+                            <p:dataTable var="item" id="testDT" value="#{allReservationBean.listChambreLibre}" scrollable="true" scrollHeight="200" selection="#{reservationBean.chambreDetails}" rowKey="#{item.chId}">
                                 <p:column headerText="Numero chambre">
                                     <h:outputText value="#{item.chNumeroChambre}" />
                                 </p:column>
@@ -146,7 +146,6 @@
 
                             </p:dataTable>
                         </p:fieldset>
-                        <p:commandButton value="Reserver" id="nonAjax" actionListener="#{allReservationBean.valider}" ajax="false" style="text-align: center"/>
 
                     </h:form>
                 </p:dialog>
@@ -175,7 +174,7 @@
                                 <h:panelGrid columns="1" cellpadding="5">
 
                                     <h:outputLabel value="Type pièce :" />
-                                    <p:selectOneMenu value="#{allReservationBean.typePiece}"   label="Type pièce" style="width:270px !important" rendered="#{reservationBean.testCat==true}">  
+                                    <p:selectOneMenu value="#{allReservationBean.typePiece}"   label="Type pièce" style="width:270px !important" >  
 
 
                                         <f:selectItem itemLabel="--Type pièce--" itemValue="" />  
@@ -246,7 +245,7 @@
 
                                         <p:dataTable var="itemReser"  value="#{allReservationBean.listChambresDto}" scrollable="true" scrollHeight="200"  >
                                             <f:facet name="header">
-                                                <p:commandButton  update="" value="Ajouter une chambre" oncomplete="PF('carDialog').show()" />
+                                                <p:commandButton  update=":chambreChoose" value="Ajouter une chambre" actionListener="#{reservationBean.loadChambreLibre}"  />
                                             </f:facet>
                                             <p:column headerText="N° chambre">
                                                 <h:outputText value="#{itemReser.numeroChambre}" />
@@ -290,6 +289,8 @@
 
                                     </h:panelGrid>
                                 </p:fieldset>
+
+                                <p:commandButton value="Reserver" id="nonAjax" actionListener="#{allReservationBean.valider}" ajax="false" style="text-align: center"/>
 
                             </h:form>
                         </div>

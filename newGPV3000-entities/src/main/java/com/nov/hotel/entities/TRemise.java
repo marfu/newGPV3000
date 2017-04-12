@@ -29,7 +29,7 @@ public class TRemise implements Serializable{
     private String remiseLib;
     
     @Column(name = "TREMISE_TAUX")
-    private String remiseTaux;
+    private Double remiseTaux;
 
 	public long getRemiseId() {
 		return remiseId;
@@ -47,13 +47,15 @@ public class TRemise implements Serializable{
 		this.remiseLib = remiseLib;
 	}
 
-	public String getRemiseTaux() {
-		return remiseTaux;
-	}
+    public Double getRemiseTaux() {
+        return remiseTaux;
+    }
 
-	public void setRemiseTaux(String remiseTaux) {
-		this.remiseTaux = remiseTaux;
-	}
+    public void setRemiseTaux(Double remiseTaux) {
+        this.remiseTaux = remiseTaux;
+    }
+
+	
 
 	@Override
 	public String toString() {

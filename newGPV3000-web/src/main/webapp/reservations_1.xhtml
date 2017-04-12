@@ -61,7 +61,7 @@
                                             <p:dataTable var="item2"  value="#{reservationBean.listChambresDto}" scrollable="true" scrollHeight="200"  >
 
                                                 <f:facet name="header">
-                                                    <p:commandButton  actionListener="#{reservationBean.loadChambreLibre}" update=":chambreChoose" value="Ajouter une chambre"  />
+                                                    <p:commandButton validateClient="true" actionListener="#{reservationBean.listChambresDto}" value="Ajouter une chambre" oncomplete="PF('carDialog').show()" />
                                                 </f:facet>
                                                 <p:column headerText="Numero chambre">
                                                     <h:outputText value="#{item2.numeroChambre}" />

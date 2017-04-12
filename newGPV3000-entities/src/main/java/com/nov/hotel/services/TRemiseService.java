@@ -31,6 +31,10 @@ public class TRemiseService {
    public List<TRemise> findAllRemise (){
         return tRemiseDao.findAll();
 }
+   
+    public TRemise findRemiseById (long id){
+        return tRemiseDao.findById(id);
+}
 
 
   

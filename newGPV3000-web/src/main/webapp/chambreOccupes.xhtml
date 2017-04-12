@@ -18,7 +18,7 @@
 
                 <p:breadCrumb>
                     <p:menuitem value="Home" url="#" />
-                    <p:menuitem value="Gestion des réservations" url="#" />
+                    <p:menuitem value="Facturations" url="#" />
                 </p:breadCrumb>
                 <div class="EmptyBox20"></div>
 
@@ -26,34 +26,25 @@
                 <h:form id="viewReservation">
                     <p:growl id="growl" showDetail="true" sticky="true" />  
                     <p:dataTable var="item" value="#{chambreFactureBean.chambreOccupation}" id="grid" paginator="true"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15"
-
+                                 scrollable="true" 
+                                 scrollHeight="300"
                                  selection="#{chambreFactureBean.chambreOccupationSelected}" 
-                                 rowKey="#{item.factureId}" 
+                                 rowKey="#{item.chambre.chId}" 
                                  >
-                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                        <p:column selectionMode="multiple" style="width:25px;text-align:center"/>
 
-                        <p:column headerText="N° réservation">
+                        <p:column headerText="N° réservation" sortBy="#{item.numReservation}" filterBy="#{item.numReservation}">
                             <h:outputText value="#{item.numReservation}" />
                         </p:column>
-                        <p:column headerText="N° chambre">
+                        <p:column headerText="N° chambre" sortBy="#{item.chambre.chNumeroChambre}" filterBy="#{item.chambre.chNumeroChambre}">
                             <h:outputText value="#{item.chambre.chNumeroChambre}" />
                         </p:column>
 
-                        <p:column headerText="Client">
+                        <p:column headerText="Client" sortBy="#{item.client.cliNom}" filterBy="#{item.client.cliNom}">
                             <h:outputText value="#{item.client.cliNom}" />
                             <h:outputText value="#{item.client.cliPrenom}" />
                         </p:column>
 
-
-                        <p:column style="width:32px">
-
-                        </p:column>
-
-                        <p:column style="width:32px">
-
-                        </p:column>
                         <p:column style="width:32px">
 
 
@@ -83,20 +74,19 @@
                                 <div style="float:left">
                                     <h:panelGrid columns="2" cellpadding="5">
                                         <h:outputLabel value="Client :" />
-
-                                        <p:selectOneMenu  value="#{chambreFactureBean.clientId}"  label="Remise">  
-                                            <p:ajax listener="#{chambreFactureBean.findDepository}" update="depot" />
-                                            <f:selectItem itemLabel="--Choisir un client--" itemValue="" />                                     
-                                            <f:selectItems value="#{chambreFactureBean.clientByChoose}" var="tag1"  itemLabel="#{tag1.cliNom}" itemValue="#{tag1.cliId}"/>  
+    
+                                        <p:selectOneMenu   value="#{chambreFactureBean.clientId}"  label="Remise">  
+                                            <p:ajax listener="#{chambreFactureBean.findDepository}" update=":viewReservation:multiCarDetail" />
+                                            <f:selectItems value="#{chambreFactureBean.clientByChoose}" var="tag1"  itemLabel="#{tag1.cliNom} #{tag1.cliPrenom}" itemValue="#{tag1.cliId}"/>  
 
                                         </p:selectOneMenu>
                                     </h:panelGrid>
 
                                 </div>
                                 <div style="float:left">
-                                    <h:panelGrid columns="2" cellpadding="5" id="depot" rendered="#{chambreFactureBean.deposit > 0}">
-                                    <h:outputLabel value="Dépot:"  />
-                                    <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.deposit}" />
+                                    <h:panelGrid columns="2" cellpadding="5" id="depot" rendered="#{chambreFactureBean.deposit>0}">
+                                        <h:outputLabel value="Dépot:"  />
+                                        <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.deposit}" />
                                     </h:panelGrid>
                                 </div>
 
@@ -105,9 +95,9 @@
                                     <h:panelGrid columns="2" cellpadding="5">
                                         <h:outputLabel value="Remise :" />
 
-                                        <p:selectOneMenu  value="#{chambreFactureBean.remise}"  label="Remise">  
+                                        <p:selectOneMenu required="true" value="#{chambreFactureBean.remise}"  label="Remise">  
+                                            <p:ajax listener="#{chambreFactureBean.chooseRemise}" update=":viewReservation:multiCarDetail" />
 
-                                            <f:selectItem itemLabel="--Remise--" itemValue="" />                                     
                                             <f:selectItems value="#{remiseBean.listRemise}" var="tag"  itemLabel="#{tag.remiseLib}" itemValue="#{tag.remiseId}"/>  
 
                                         </p:selectOneMenu>
@@ -177,7 +167,7 @@
                                 </p:column>
 
                                 <p:column style="width:32px;text-align: center">
-                                    <p:commandButton oncomplete="PF('carDialog').show()" update=":viewReservation:carDetail" icon="ui-icon-edit" title="View">
+                                    <p:commandButton oncomplete="PF('carDialog').show()" style="color:white" update=":viewReservation:carDetail" icon="ui-icon fa fa-edit" title="View">
                                         <f:setPropertyActionListener value="#{item}" target="#{chambreFactureBean.chambreOccSelectedDto}" />
                                     </p:commandButton>
                                 </p:column>
@@ -193,12 +183,10 @@
 
                                         <h:outputLabel value="Montant total:"  />
                                         <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.montantTotal}" />
+                                        <h:outputLabel value="Remise :"  />
+                                        <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.montantRemise}" />
 
-
-                                        <h:outputLabel value="Tva :"  />
-                                        <h:outputText style="color:black;font-weight: bold" value="18%" />
-
-                                        <h:outputLabel value="Montant TTC :"  />
+                                        <h:outputLabel value="Montant à payer :"  />
                                         <h:outputText style="color:black;font-weight: bold" value="#{chambreFactureBean.montantTTC}" />
 
 
@@ -207,7 +195,7 @@
                                 </div>
                                 <div style="clear: both"></div>
                             </div>
-                            <p:commandButton actionListener="#{chambreFactureBean.changeDate}" update=":viewReservation:multiCarDetail" oncomplete="PF('carDialog').hide()" value="Valider et encaisser" title="View">
+                            <p:commandButton actionListener="#{chambreFactureBean.changeDate}" update=":viewReservation:multiCarDetail" oncomplete="PF('validDialog').show()" value="Valider et encaisser" title="View">
 
                             </p:commandButton>
                         </p:outputPanel>
@@ -227,7 +215,26 @@
 
 
                             </p:panelGrid>
-                            <p:commandButton actionListener="#{chambreFactureBean.changeDate}" update=":viewReservation:multiCarDetail :viewReservation:montan" oncomplete="PF('carDialog').hide()" value="Valider" title="View">
+                            <p:commandButton  actionListener="#{chambreFactureBean.changeDate}"  update=":viewReservation:multiCarDetail :viewReservation:montan" oncomplete="PF('carDialog').hide()" value="Valider" title="View">
+
+                            </p:commandButton>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Valider et encaisser" widgetVar="validDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="validDetail" style="text-align:center;">
+                            <p:panelGrid  columns="2"  columnClasses="label,value">
+
+                                <h:outputText value="Mode de paiment:" />
+                                <p:selectOneMenu   value="#{chambreFactureBean.modePaiementId}"  label="Remise">  
+                                    <f:selectItem itemLabel="--Mode de paiement--" itemValue="" />     
+                                    <f:selectItems value="#{tModePaiement.listModePaiement}" var="ta"  itemLabel="#{ta.libelleMode}" itemValue="#{ta.id}"/>  
+
+                                </p:selectOneMenu>
+                                <h:outputText value="Mumero chèque:" />
+                                <p:inputText value="#{chambreFactureBean.fac.numCheque}"/>
+                            </p:panelGrid>
+                            <p:commandButton validateClient="true" actionListener="#{chambreFactureBean.validerEncaisser}" update=":viewReservation" oncomplete="PF('validDialog').hide()" value="Valider" title="View">
 
                             </p:commandButton>
                         </p:outputPanel>

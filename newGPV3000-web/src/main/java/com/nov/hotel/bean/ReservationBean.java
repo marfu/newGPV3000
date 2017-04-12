@@ -40,6 +40,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -210,7 +211,7 @@ public class ReservationBean implements Serializable {
 
     public List<TChambre> getListChambreLibre() {
 
-        return listChambreLibre = tChambreService.listChambreByEtat(EtatChambreEnum.LIBRE);
+        return listChambreLibre;
     }
 
     public void setListChambreLibre(List<TChambre> listChambreLibre) {
@@ -310,22 +311,32 @@ public class ReservationBean implements Serializable {
     }
 
     public void ajouterChambre(ActionEvent actionEvent) {
+        boolean result = true;
         System.out.println("xxxxxxxxxxxxx");
-        TTarif tTarif = tTarifService.findOffreTarifaire(idCategorieChambre, chambreDetails.getChCategorie().getCatChambreId());
-        TOffreTarifaire toffr = tOffreTarifaireService.findOffreTarifaire(idCategorieChambre);
-        ChambreDto dto = new ChambreDto();
-        dto.setCatChambre(chambreDetails.getChCategorie().getCatChambreLib());
-        dto.setIdChambre(chambreDetails.getChId());
-        dto.setLibChambre(chambreDetails.getChLib());
-        dto.setFofChambre(toffr.getOffTitre());
-        dto.setIdfofChambre(toffr.getOffreId());
-        dto.setPrixFofChambre(tTarif.getTTARIF_PRIX());
-        dto.setNumeroChambre(chambreDetails.getChNumeroChambre());
+        for (ChambreDto ch : listChambresDto) {
+            if (ch.getIdChambre() == chambreDetails.getChId()) {
+                System.out.println("chambre existe");
+                result = false;
+                break;
+            }
+        }
+        if (result) {
+            TTarif tTarif = tTarifService.findOffreTarifaire(idCategorieChambre, chambreDetails.getChCategorie().getCatChambreId());
+            TOffreTarifaire toffr = tOffreTarifaireService.findOffreTarifaire(idCategorieChambre);
+            ChambreDto dto = new ChambreDto();
+            dto.setCatChambre(chambreDetails.getChCategorie().getCatChambreLib());
+            dto.setIdChambre(chambreDetails.getChId());
+            dto.setLibChambre(chambreDetails.getChLib());
+            dto.setFofChambre(toffr.getOffTitre());
+            dto.setIdfofChambre(toffr.getOffreId());
+            dto.setPrixFofChambre(tTarif.getTTARIF_PRIX());
+            dto.setNumeroChambre(chambreDetails.getChNumeroChambre());
+            listChambresDto.add(dto);
+           
+        }
 
-        listChambresDto.add(dto);
-
-        System.out.println("xxxxxxxxxxxxx");
-
+        //listChambresDto.remove(dto);
+        //System.out.println("Supprimé");
         //    idCategorieChambre;
     }
 
@@ -355,14 +366,14 @@ public class ReservationBean implements Serializable {
             }
 
             tClientService.CreerTClient(client);
-            int lastId=1;
+            int lastId = 1;
             TReservation lastReserv = tReservationService.getLastReservation();
-            if(lastReserv!=null && String.valueOf(lastReserv.getResId()) !=null ){
-              lastId = (int) (lastReserv.getResId() + 1);
-            }else{
-               lastId = 1;
+            if (lastReserv != null && String.valueOf(lastReserv.getResId()) != null) {
+                lastId = (int) (lastReserv.getResId() + 1);
+            } else {
+                lastId = 1;
             }
-            
+
             reservation.setResClient(client);
 
             reservation.setDateArrive(dateDebut);
@@ -448,6 +459,15 @@ public class ReservationBean implements Serializable {
             securityBean = (SecurityBean) FacesContext.getCurrentInstance().getApplication().getELResolver().getValue(context.getELContext(), null, "securityBean");
         }
         return securityBean;
+    }
+
+    public void loadChambreLibre() {
+
+        System.out.println("xxxxxxxxx===========");
+        listChambreLibre = tChambreService.listChambreByEtat(EtatChambreEnum.LIBRE);
+        System.out.println("xxxxxxxxx===========" + listChambreLibre.size());
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('carDialog').show();");
     }
 
 }

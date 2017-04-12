@@ -231,7 +231,24 @@
                        
                     </p:tab>
 
-                   
+                    <p:tab title="Reservation">
+                        <h:form>
+                            <p:fieldset legend="Client" style="margin-bottom:20px" >
+                                <h:panelGrid columns="2" cellpadding="5">
+
+                                    <h:outputLabel value="Email :" for="email" />
+                                    <p:inputText id="email" value="#{reservationBean.client.cliEmail}" title="Email"  label="Email"/>
+
+
+                                </h:panelGrid>
+                            </p:fieldset> 
+
+                            <p:commandButton   update="" action="#{reservationBean.changeDate}" icon="ui-icon fa fa-trash" style="color:white" title="update">
+
+                            </p:commandButton>
+                        </h:form>
+
+                    </p:tab>
 
 
 

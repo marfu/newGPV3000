@@ -472,9 +472,9 @@ public class TServiceBean implements Serializable {
                 serviceConso = tServiceService.findByIDService(serv.getSceId());
                 TDetailFacture tdetailFacture = new TDetailFacture();
                 tdetailFacture.setFacture(tfacture);
-                tdetailFacture.setdFactDateCreate(today);
-                tdetailFacture.setdFactQte(serv.getQte());
-                tdetailFacture.setdFactPrix(serv.getScePrix());
+                tdetailFacture.setDfactDateCreate(today);
+                tdetailFacture.setDfactQte(serv.getQte());
+                tdetailFacture.setDfactPrix(serv.getScePrix());
                 tdetailFacture.setService(serviceParent);
                 tdetailFacture.setServiceConsoId(serviceConso);
                 tdFature = tdetailFactureService.CreerTDetailFacture(tdetailFacture);

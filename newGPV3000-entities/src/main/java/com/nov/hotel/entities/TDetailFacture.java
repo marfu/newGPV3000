@@ -34,7 +34,7 @@ public class TDetailFacture implements Serializable{
     
      @Column(name = "TDFACT_DATE_CREATE")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date dFactDateCreate;
+	private Date dfactDateCreate;
     
     @ManyToOne
    	@JoinColumn(name = "TDFACT_FACTURE", referencedColumnName = "TFACT_ID")
@@ -56,10 +56,10 @@ public class TDetailFacture implements Serializable{
     private String userModif;
 
     @Column(name = "TDFACT_PRIX")
-    private double dFactPrix;
+    private double dfactPrix;
     
     @Column(name = "TDFACT_QTE")
-    private long dFactQte;
+    private long dfactQte;
 
 	public long getFactId() {
 		return factId;
@@ -69,13 +69,6 @@ public class TDetailFacture implements Serializable{
 		this.factId = factId;
 	}
 
-	public Date getdFactDateCreate() {
-		return dFactDateCreate;
-	}
-
-	public void setdFactDateCreate(Date dFactDateCreate) {
-		this.dFactDateCreate = dFactDateCreate;
-	}
 
 	public TFacture getFacture() {
 		return facture;
@@ -109,23 +102,33 @@ public class TDetailFacture implements Serializable{
         this.userModif = userModif;
     }
 
+    public Date getDfactDateCreate() {
+        return dfactDateCreate;
+    }
+
+    public void setDfactDateCreate(Date dfactDateCreate) {
+        this.dfactDateCreate = dfactDateCreate;
+    }
+
+    public double getDfactPrix() {
+        return dfactPrix;
+    }
+
+    public void setDfactPrix(double dfactPrix) {
+        this.dfactPrix = dfactPrix;
+    }
+
+    public long getDfactQte() {
+        return dfactQte;
+    }
+
+    public void setDfactQte(long dfactQte) {
+        this.dfactQte = dfactQte;
+    }
+
 	
 
-	public double getdFactPrix() {
-		return dFactPrix;
-	}
-
-	public void setdFactPrix(double dFactPrix) {
-		this.dFactPrix = dFactPrix;
-	}
-
-	public long getdFactQte() {
-		return dFactQte;
-	}
-
-	public void setdFactQte(long dFactQte) {
-		this.dFactQte = dFactQte;
-	}
+	
 
     public TArticle getArticleConsoId() {
         return articleConsoId;
@@ -137,8 +140,10 @@ public class TDetailFacture implements Serializable{
 
     @Override
     public String toString() {
-        return "TDetailFacture{" + "factId=" + factId + ", dFactDateCreate=" + dFactDateCreate + ", facture=" + facture + ", service=" + service + ", serviceConsoId=" + serviceConsoId + ", articleConsoId=" + articleConsoId + ", userModif=" + userModif + ", dFactPrix=" + dFactPrix + ", dFactQte=" + dFactQte + '}';
+        return "TDetailFacture{" + "factId=" + factId + ", dfactDateCreate=" + dfactDateCreate + ", facture=" + facture + ", service=" + service + ", serviceConsoId=" + serviceConsoId + ", articleConsoId=" + articleConsoId + ", userModif=" + userModif + ", dfactPrix=" + dfactPrix + ", dfactQte=" + dfactQte + '}';
     }
+
+    
 
 
 }

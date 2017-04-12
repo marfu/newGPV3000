@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.nov.hotel.entities;
 
@@ -25,98 +25,109 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "T_FACTURE")
-public class TFacture implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class TFacture implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "TFACT_ID")
     private long factId;
-    
-     @Column(name = "TFACT_DATE_CREATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date factDateCreate;
-    
+
+    @Column(name = "TFACT_DATE_CREATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date factDateCreate;
+
     @Column(name = "TFACT_DATE_MODIF")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date factDateModif;
-    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date factDateModif;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "ETAT", length=10)
+    @Column(name = "ETAT", length = 10)
     private EtatFactureEnum statuId;
-    
+
 //    @ManyToOne
 //   	@JoinColumn(name = "TFACT_CH_ID", referencedColumnName = "TCH_ID")
 //    private TChambre chambre;
-    
-   	@Column(name = "TFACT_USER_CREATE")
+    @Column(name = "TFACT_USER_CREATE")
     private String userCreate;
-    
-   	@Column(name = "TFACT_USER_MODIF")
+
+    @Column(name = "TFACT_USER_MODIF")
     private String userModif;
 
     @ManyToOne
-   	@JoinColumn(name = "TFACT_REMISE", referencedColumnName = "TREMISE_ID")
+    @JoinColumn(name = "TFACT_REMISE", referencedColumnName = "TREMISE_ID")
     private TRemise remise;
+
+    @ManyToOne
+    @JoinColumn(name = "TMODE_PAIEMENT", referencedColumnName = "TModePaiment_ID")
+    private TModePaiment modePaiement;
     
     
-@Column(name = "TFACT_NUMFACTURE")
-	private String numFacture;
+    @ManyToOne
+    @JoinColumn(name = "TFACT_CLIENT", referencedColumnName = "TCLI_ID")
+    private TClient client;
 
-	public long getFactId() {
-		return factId;
-	}
+    @Column(name = "TFACT_NUMFACTURE")
+    private String numFacture;
 
-	public void setFactId(long factId) {
-		this.factId = factId;
-	}
+    @Column(name = "TFACT_NUMCHEQUE")
+    private String numCheque;
 
-	public Date getFactDateCreate() {
-		return factDateCreate;
-	}
+    public long getFactId() {
+        return factId;
+    }
 
-	public void setFactDateCreate(Date factDateCreate) {
-		this.factDateCreate = factDateCreate;
-	}
+    public void setFactId(long factId) {
+        this.factId = factId;
+    }
 
-	public Date getFactDateModif() {
-		return factDateModif;
-	}
+    public Date getFactDateCreate() {
+        return factDateCreate;
+    }
 
-	public void setFactDateModif(Date factDateModif) {
-		this.factDateModif = factDateModif;
-	}
+    public void setFactDateCreate(Date factDateCreate) {
+        this.factDateCreate = factDateCreate;
+    }
 
-	public EtatFactureEnum getStatuId() {
-		return statuId;
-	}
+    public Date getFactDateModif() {
+        return factDateModif;
+    }
 
-	public void setStatuId(EtatFactureEnum statuId) {
-		this.statuId = statuId;
-	}
+    public void setFactDateModif(Date factDateModif) {
+        this.factDateModif = factDateModif;
+    }
 
-	public String getUserCreate() {
-		return userCreate;
-	}
+    public EtatFactureEnum getStatuId() {
+        return statuId;
+    }
 
-	public void setUserCreate(String userCreate) {
-		this.userCreate = userCreate;
-	}
+    public void setStatuId(EtatFactureEnum statuId) {
+        this.statuId = statuId;
+    }
 
-	public String getUserModif() {
-		return userModif;
-	}
+    public String getUserCreate() {
+        return userCreate;
+    }
 
-	public void setUserModif(String userModif) {
-		this.userModif = userModif;
-	}
+    public void setUserCreate(String userCreate) {
+        this.userCreate = userCreate;
+    }
 
-	public TRemise getRemise() {
-		return remise;
-	}
+    public String getUserModif() {
+        return userModif;
+    }
 
-	public void setRemise(TRemise remise) {
-		this.remise = remise;
-	}
+    public void setUserModif(String userModif) {
+        this.userModif = userModif;
+    }
+
+    public TRemise getRemise() {
+        return remise;
+    }
+
+    public void setRemise(TRemise remise) {
+        this.remise = remise;
+    }
 
     public String getNumFacture() {
         return numFacture;
@@ -126,16 +137,34 @@ public class TFacture implements Serializable{
         this.numFacture = numFacture;
     }
 
-        
-        
-        
-    @Override
-    public String toString() {
-        return "TFacture{" + "factId=" + factId + ", factDateCreate=" + factDateCreate + ", factDateModif=" + factDateModif + ", statuId=" + statuId + ", userCreate=" + userCreate + ", userModif=" + userModif + ", remise=" + remise + '}';
+    public TModePaiment getModePaiement() {
+        return modePaiement;
     }
 
-		
-    
-	
+    public void setModePaiement(TModePaiment modePaiement) {
+        this.modePaiement = modePaiement;
+    }
+
+    public String getNumCheque() {
+        return numCheque;
+    }
+
+    public void setNumCheque(String numCheque) {
+        this.numCheque = numCheque;
+    }
+
+    public TClient getClient() {
+        return client;
+    }
+
+    public void setClient(TClient client) {
+        this.client = client;
+    }
+
+    @Override
+    public String toString() {
+        return "TFacture{" + "factId=" + factId + ", factDateCreate=" + factDateCreate + ", factDateModif=" + factDateModif + ", statuId=" + statuId + ", userCreate=" + userCreate + ", userModif=" + userModif + ", remise=" + remise + ", modePaiement=" + modePaiement + ", client=" + client + ", numFacture=" + numFacture + ", numCheque=" + numCheque + '}';
+    }
+
 
 }

@@ -36,5 +36,11 @@ public class TClientService  {
        
     }
     
+     public TClient findById(long id) {
+        
+      return tClientDao.findById(id);
+       
+    }
+    
     
 }
