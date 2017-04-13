@@ -54,48 +54,51 @@
     <ui:define name="content">
         <div class="Container100">
             <div class="ContainerIndent">
-
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Paramétrage" url="#" />
+                    <p:menuitem value="Services" url="#" />
+                </p:breadCrumb>
                 <div class="EmptyBox20"></div>
 
                 <f:view>
                     <div>
                         <div style="float:left">
-                            <h:panelGrid columns="1" cellpadding="5">
 
-
-                                <p:commandButton value="Ajouter" type="button" actionListener="#{serviceBean.clearEntity}" update=":myform" onclick="PF('dlg2').show();"/>
-
-
-                            </h:panelGrid>
                         </div>
 
                     </div>
+                    <h:form id="formprincipale"> 
+                        <p:dataTable var="item" value="#{serviceBean.listTServiceParent}" id="grid" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" rows="10">
 
-                    <p:dataTable var="item" value="#{serviceBean.listTServiceParent}" id="grid" paginator="true"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15">
+                            <f:facet name="header">
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{serviceBean.clearEntity}" update=":myform" onclick="PF('dlg2').show();"/>
 
-                        <p:column headerText="Nom">
-                            <h:outputText value="#{item.sceNom}" />
-                        </p:column>
-
-
-                        <p:column style="width:32px">
-                            <p:commandButton ajax="true" actionListener="#{serviceBean.detailService}" update=":myform :myform2" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
-
-                                <f:param name="userIds" value="#{item.sceId}" />
-                            </p:commandButton>
-                        </p:column>
-
-                        <p:column style="width:32px">
-                            <p:commandButton ajax="true" actionListener="#{serviceBean.detailEBCF}" update=":myform2" oncomplete="PF('dlgSservice').show();" icon="ui-icon fa fa-eye" style="color:white">
-
-                                <f:param name="parentId" value="#{item.sceId}" />
-                            </p:commandButton>
-                        </p:column>
+                            </f:facet>
+                            <p:column headerText="Nom">
+                                <h:outputText value="#{item.sceNom}" />
+                            </p:column>
 
 
-                    </p:dataTable>
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" actionListener="#{serviceBean.detailService}" update=":myform :myform2" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                    <f:param name="userIds" value="#{item.sceId}" />
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" actionListener="#{serviceBean.detailEBCF}" update=":myform2" oncomplete="PF('dlgSservice').show();" icon="ui-icon fa fa-eye" style="color:white">
+
+                                    <f:param name="parentId" value="#{item.sceId}" />
+                                </p:commandButton>
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </h:form>
 
                     <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" >
 
@@ -112,7 +115,7 @@
                                     <h:outputLabel value="Nom :" for="Nom" />
                                     <p:inputText id="Nom" value="#{serviceBean.tservice.sceNom}" title="Nom" required="true" label="Nom"/>
 
-                                    
+
 
                                     <h:outputLabel value="Parent :" for="Parent" />
                                     <p:selectOneMenu value="#{serviceBean.idservice}" label="Service Parent">  
@@ -123,7 +126,7 @@
 
                                 </h:panelGrid>
 
-                                <p:commandButton value="Valider" update="grid" icon="ui-icon-check" validateClient="true" style="margin-right:10px" action="#{serviceBean.creerTService}"/>
+                                <p:commandButton value="Valider" update=":formprincipale" icon="ui-icon-check" validateClient="true" style="margin-right:10px" action="#{serviceBean.creerTService}"/>
 
                             </h:form>
 
@@ -140,9 +143,7 @@
 
                                 <p:messages autoUpdate="true"/>
 
-                                <p:dataTable var="items" value="#{serviceBean.listTServiceIntermediaire}" id="grid" paginator="true"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15">
+                                <p:dataTable var="items" value="#{serviceBean.listTServiceIntermediaire}" id="gridform2"  scrollRows="20" scrollable="true" scrollHeight="200" lazy="true" rows="40" style="margin-bottom:0">
 
                                     <p:column headerText="Nom" >
                                         <h:outputText value="#{items.sceNom}" />

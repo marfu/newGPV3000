@@ -44,6 +44,9 @@ public class TOffreTarifaireService {
 
         return tOffreTarifaireDao.createOrUpdateTOffreTarifaire(u);
     } 
-      
+      public TOffreTarifaire findOffreTarifaireByLib(String libelle) {
+
+        return tOffreTarifaireDao.findOffreTarifaireByLib(libelle);
+    } 
     
 }

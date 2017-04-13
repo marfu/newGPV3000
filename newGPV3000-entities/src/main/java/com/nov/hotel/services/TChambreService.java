@@ -91,4 +91,8 @@ public class TChambreService {
         return tChambreDao.findById(ID);
 
     }
+      public TChambre findChambrebyLib(String libelle) {
+        return tChambreDao.findChambreByLib(libelle);
+
+    }
 }

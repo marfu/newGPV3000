@@ -64,21 +64,18 @@
                 <f:view>
                     <div>
                         <div style="float:left">
-                            <h:panelGrid columns="1" cellpadding="5">
-
-
-                                <p:commandButton value="Ajouter" type="button" onclick="PF('dlg2').show();"/>
-
-
-                            </h:panelGrid>
+                          
                         </div>
 
                     </div>
                     <h:form id="form">
                         <p:dataTable var="item" value="#{categorieChambreBean.listTCategorieChambre}" id="grid" paginator="true"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15">
+                                     rowsPerPageTemplate="5,10,15" rows="10">
+                            <f:facet name="header">
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{categorieChambreBean.clearEntity}" onclick="PF('dlg2').show();"/>
 
+                            </f:facet>
 
 
 
@@ -94,7 +91,7 @@
                                     <f:param name="userId" value="#{item.catChambreId}" />
                                 </p:commandButton>
                             </p:column>
-                           
+
 
 
                         </p:dataTable>

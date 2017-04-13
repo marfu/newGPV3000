@@ -62,24 +62,16 @@
                 <div class="EmptyBox20"></div>
 
                 <f:view>
-                    <div>
-                        <div style="float:left">
-                            <h:panelGrid columns="1" cellpadding="5">
-
-
-                                <p:commandButton value="Ajouter" type="button" actionListener="#{chambreBean.clearEntity}" onclick="PF('dlg2').show();"/>
-
-
-                            </h:panelGrid>
-                        </div>
-
-                    </div>
+                    
                     <h:form id="form">
                         <p:dataTable var="item" value="#{chambreBean.listTChambre}" id="grid" paginator="true"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="5,10,15">
+                                     rowsPerPageTemplate="5,10,15" rows="10">
 
+                            <f:facet name="header">
+                                <p:commandButton value="Ajouter" type="button" actionListener="#{chambreBean.clearEntity}" onclick="PF('dlg2').show();"/>
 
+                            </f:facet>
 
 
                             <p:column headerText="Libelle">
@@ -92,10 +84,10 @@
                                 <h:outputText value="#{item.chCategorie.catChambreDesc}" />
                             </p:column>
 
-                              <p:column style="width:32px">
-                                  <p:commandButton ajax="true" actionListener="#{chambreBean.detailChambre}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" actionListener="#{chambreBean.detailChambre}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
 
-                                      <f:param name="userId" value="#{item.chId}" />
+                                    <f:param name="userId" value="#{item.chId}" />
                                 </p:commandButton>
                             </p:column>
 
@@ -121,8 +113,8 @@
                                     <h:outputLabel value="Numero Chambre:" for="NumeroChambre" />
                                     <p:inputText id="NumeroChambre" value="#{chambreBean.tchambre.chNumeroChambre}" title="Numero Chambre" required="true" label="Numero Chambre"/>
 
-                                     <h:outputLabel value="Categorie :" for="categorie" />
-                                     <p:selectOneMenu value="#{chambreBean.idcategorie}" required="true" label="Niveau hierachie">  
+                                    <h:outputLabel value="Categorie :" for="categorie" />
+                                    <p:selectOneMenu value="#{chambreBean.idcategorie}" required="true" label="Niveau hierachie">  
                                         <f:selectItem itemLabel="Selectioner une hierachie" itemValue="" />  
                                         <f:selectItems value="#{categorieChambreBean.listTCategorieChambre}" var="tag1"
                                                        itemLabel="#{tag1.catChambreLib}" itemValue="#{tag1.catChambreId}"/>  

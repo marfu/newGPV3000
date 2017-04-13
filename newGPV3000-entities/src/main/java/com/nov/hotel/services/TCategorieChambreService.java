@@ -57,11 +57,7 @@ public class TCategorieChambreService {
         return tCategorieChambreDao.findById(ID);
     }
 
-    public void deleteCandidat(Long selectCandidat) {
-
-    }
-
-    public void updateParti(Long selectParti, String code, String libelle, String logo) {
-
+        public TCategorieChambre finbyCategorieChambreByLib(String libelle){
+        return tCategorieChambreDao.findCategorieByLib(libelle);
     }
 }

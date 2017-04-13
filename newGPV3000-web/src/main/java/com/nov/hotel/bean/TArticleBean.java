@@ -118,6 +118,7 @@ public class TArticleBean implements Serializable {
     public void clearEntity() {
         tarticle = new TArticle();
         idservice=0;
+        System.out.println("dsdfgfdgfgfdfgf");
         
     }
 

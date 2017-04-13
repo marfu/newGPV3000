@@ -9,6 +9,8 @@ import com.nov.hotel.entities.TOffreTarifaire;
 import com.nov.hotel.dao.TOffreTarifaireDao;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -56,4 +58,19 @@ public class TOffreTarifaireDaoImpl extends GenericDaoImpl<TOffreTarifaire> impl
                 	return null;
 		}
     }
+
+    @Override
+    public TOffreTarifaire findOffreTarifaireByLib(String libelle) {
+     TOffreTarifaire result = null;
+        try {
+            Query q = em.createQuery("SELECT o FROM TOffreTarifaire o where o.offTitre= ?1");
+            q.setParameter(1, libelle);
+
+            result = (TOffreTarifaire) q.getSingleResult();
+
+        } catch (NoResultException e) {
+            // log.debug("No result forund for... ");
+        }
+
+        return result;}
 }

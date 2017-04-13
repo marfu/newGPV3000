@@ -6,6 +6,8 @@
 package com.nov.hotel.dao;
 
 
+import com.nov.hotel.entities.TCategorieChambre;
+import com.nov.hotel.entities.TOffreTarifaire;
 import com.nov.hotel.entities.TTarif;
 
 
@@ -22,4 +24,5 @@ public interface TTarifDao extends GenericDao<TTarif>{
     public TTarif createOrUpdate(TTarif u);
 
     public TTarif getTTarif(long id);
+   // public TTarif findOffreTarifaireByLib(TOffreTarifaire toffreTarifaire,TCategorieChambre tcategorie);
 }

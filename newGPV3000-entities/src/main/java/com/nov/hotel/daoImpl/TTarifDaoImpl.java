@@ -7,7 +7,11 @@ package com.nov.hotel.daoImpl;
 
 import com.nov.hotel.entities.TTarif;
 import com.nov.hotel.dao.TTarifDao;
+import com.nov.hotel.entities.TCategorieChambre;
+import com.nov.hotel.entities.TOffreTarifaire;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -25,15 +29,18 @@ public class TTarifDaoImpl extends GenericDaoImpl<TTarif> implements TTarifDao {
 
     @Override
     public TTarif findTarifByCatAndOffre(long idOffre, long idCat) {
-        TTarif results = (TTarif) em.createQuery("SELECT u FROM TTarif u where u.offre.offreId="+idOffre+" and u.chCategorie.catChambreId="+idCat).getSingleResult();
-
+         TTarif results =null;
+        try {
+            results = (TTarif) em.createQuery("SELECT u FROM TTarif u where u.offre.offreId=" + idOffre + " and u.chCategorie.catChambreId=" + idCat).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
         return results;
     }
 
-    
-     @Override
+    @Override
     public TTarif createOrUpdate(TTarif u) {
-        
+
         TTarif temp = getTTarif(u.getTarifId());
         if (temp != null) {
             em.merge(u);
@@ -44,17 +51,17 @@ public class TTarifDaoImpl extends GenericDaoImpl<TTarif> implements TTarifDao {
             return u;
         }
     }
-    
-    
+
     @Override
-	public TTarif getTTarif(long id) {
-		try {
-			TTarif u = em.find(TTarif.class, id);
+    public TTarif getTTarif(long id) {
+        try {
+            TTarif u = em.find(TTarif.class, id);
 //			if (u.getPvt() != null)
 //				u.getPvt().size();
-			return u;
-		} catch (Exception e) {
-			return null;
-		}
-	}
+            return u;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }

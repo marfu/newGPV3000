@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            function skinChart() {
+                this.cfg.shadow = false;
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1'];
+                this.cfg.grid = {
+                    background: '#f3f5f7',
+                    borderColor: '#e5ebf0',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    rendererOptions: {
+                        textColor: '#9fadb5'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    markerOptions: {
+                        shadow: false
+                    }
+                }
+            }
+
+            function skinPie() {
+                this.cfg.seriesColors = ['#dae8ef', '#27aae1', '#33ccff', '#9fadb5'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#eaeaea',
+                    gridLineColor: '#e5ebf0',
+                    shadow: false,
+                    borderWidth: 0
+                };
+                this.cfg.seriesDefaults.shadow = false;
+            }
+        </script>
+        <style type="text/css">
+            .jqplot-target, .jqplot-axis {
+                color: #9fadb5;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="EmptyBox20"></div>
+
+
+                <div style="float:left">
+                    <h:form id="form">
+                        <p:dataTable id="grid" >
+
+
+
+
+                            <p:column headerText="Intitulé">
+                                <h:outputText value="Télécharger les données des Categorie chambres" />
+                                <h:outputText value="Télécharger les données des chambres" />
+                                <h:outputText value="Télécharger les données des offres tarifaires" />
+                            </p:column>
+
+
+                            <p:column style="width:32px">
+                                <p:commandButton  value="Télécharger" type="button" onclick="PF('dlg1').show();"/>
+                                <p:commandButton  value="Télécharger" type="button" onclick="PF('dlg2').show();"/>
+                                <p:commandButton  value="Télécharger" type="button" onclick="PF('dlg3').show();"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:form>
+
+
+
+
+
+
+                </div>
+                <p:dialog header="Téléchargement des categories des chambres " widgetVar="dlg1" modal="true" height="auto" >
+
+
+                    <f:view>
+                        <h:form>
+                            <p:fileUpload fileUploadListener="#{fileUploadController.uploadFCategorieChambre}" mode="advanced"
+                                          update="messages" auto="true" sizeLimit="10000000" allowTypes="/(\.|\/)(csv|xlsx)$/" />
+
+                            <p:growl id="messages" showDetail="true" />
+                        </h:form>
+
+                    </f:view>
+
+                </p:dialog> 
+                
+                <p:dialog header="Téléchargement des chambres " widgetVar="dlg2" modal="true" height="auto" >
+
+
+                    <f:view>
+                        <h:form>
+                            <p:fileUpload fileUploadListener="#{fileUploadController.uploadFChambre}" mode="advanced"
+                                          update="messages" auto="true" sizeLimit="10000000" allowTypes="/(\.|\/)(csv|xlsx)$/" />
+
+                            <p:growl id="messages" showDetail="true" />
+                        </h:form>
+
+                    </f:view>
+
+                </p:dialog> 
+                
+                <p:dialog header="Téléchargement des offres tarifaires" widgetVar="dlg3" modal="true" height="auto" >
+
+
+                    <f:view>
+                        <h:form>
+                            <p:fileUpload fileUploadListener="#{fileUploadController.uploadFOffreTarifaire}" mode="advanced"
+                                          update="messages" auto="true" sizeLimit="10000000" allowTypes="/(\.|\/)(csv|xlsx)$/" />
+
+                            <p:growl id="messages" showDetail="true" />
+                        </h:form>
+
+                    </f:view>
+
+                </p:dialog> 
+
+
+
+
+                <div class="EmptyBox10"></div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -11,6 +11,8 @@ package com.nov.hotel.daoImpl;
 import com.nov.hotel.entities.TCategorieChambre;
 import com.nov.hotel.dao.TCategorieChambreDao;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -53,4 +55,22 @@ public class TCategorieChambreDaoImpl extends GenericDaoImpl<TCategorieChambre> 
 			return null;
 		}
 	}
+
+   
+    
+    @Override
+    public TCategorieChambre findCategorieByLib(String libelle) {
+        TCategorieChambre result = null;
+        try {
+            Query q = em.createQuery("SELECT cc FROM TCategorieChambre cc where cc.catChambreLib= ?1");
+            q.setParameter(1, libelle);
+
+            result = (TCategorieChambre) q.getSingleResult();
+
+        } catch (NoResultException e) {
+            // log.debug("No result forund for... ");
+        }
+
+        return result;
+    }
 }

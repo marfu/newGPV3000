@@ -138,8 +138,13 @@ public class TfactureDtoBean implements Serializable {
             listTdetailFacture.size();
             for (TDetailFacture detfac : listTdetailFacture) {
                 detfac.toString();
-                vprix = +detfac.getDfactPrix();
-                vqte = +detfac.getDfactQte();
+                vprix = vprix+detfac.getDfactPrix();
+                vqte = vqte+detfac.getDfactQte();
+                
+                System.out.println("xxxxxxxxxxxxxxxxxxxxxxx");
+                System.out.println(vprix);
+                System.out.println(detfac.getDfactPrix());
+                
             }
             vfact.setPrix(vprix);
             vfact.setQte(vqte);

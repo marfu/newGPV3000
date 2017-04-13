@@ -23,4 +23,5 @@ public interface TOffreTarifaireDao extends GenericDao<TOffreTarifaire>{
     
       public TOffreTarifaire createOrUpdateTOffreTarifaire(TOffreTarifaire u);         
   public TOffreTarifaire getTOffreTarifaire(long id);
+  public TOffreTarifaire findOffreTarifaireByLib(String libelle);
 }

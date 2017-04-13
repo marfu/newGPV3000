@@ -28,4 +28,5 @@ public interface TChambreDao extends GenericDao<TChambre>{
     
      public TChambre createOrUpdate(TChambre u);         
      public TChambre getChambre(long id);
+     public TChambre findChambreByLib(String libelle);
 }

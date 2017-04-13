@@ -54,52 +54,52 @@
     <ui:define name="content">
         <div class="Container100">
             <div class="ContainerIndent">
-
+                <p:breadCrumb>
+                    <p:menuitem value="Home" url="#" />
+                    <p:menuitem value="Paramétrage" url="#" />
+                    <p:menuitem value="Articles" url="#" />
+                </p:breadCrumb>
                 <div class="EmptyBox20"></div>
 
                 <f:view>
                     <div>
                         <div style="float:left">
-                            <h:panelGrid columns="1" cellpadding="5">
 
-
-                                <p:commandButton value="Ajouter" type="button" actionListener="#{articleBean.clearEntity()}" onclick="PF('dlg2').show();"/>
-
-
-                            </h:panelGrid>
                         </div>
                     </div>
-
-                    <p:dataTable var="item" value="#{articleBean.listTArticle}" id="grid" paginator="true"
-                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15">
-
-                        <p:column headerText="Nom">
-                            <h:outputText value="#{item.artNom}" />
-                        </p:column>
-                        <p:column headerText="Prix">
-                            <h:outputText value="#{item.artPrix}" />
-                        </p:column>
-                        <p:column headerText="Service">
-                            <h:outputText value="#{item.artService.sceNom}" />
-                        </p:column>
-                        <p:column headerText="Taux">
-                            <h:outputText value="#{item.artTaux}" />
-                        </p:column>
-
-
-                        <p:column style="width:32px">
-                            <p:commandButton ajax="true" actionListener="#{articleBean.detailArticle}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
-
-                                <f:param name="userIds" value="#{item.artId}" />
-                            </p:commandButton>
-                        </p:column>
+                    <h:form>
+                        <p:dataTable var="item" value="#{articleBean.listTArticle}" id="grid" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" rows="10">
+                            <f:facet name="header">
+                                <p:commandButton value="Ajouter" type="button" action="#{articleBean.clearEntity}" update=":myform" onclick="PF('dlg2').show();"/>
+                            </f:facet>
+                            <p:column headerText="Nom" sortBy="#{item.artNom}">
+                                <h:outputText value="#{item.artNom}" />
+                            </p:column>
+                            <p:column headerText="Prix" sortBy="#{item.artPrix}">
+                                <h:outputText value="#{item.artPrix}" />
+                            </p:column>
+                            <p:column headerText="Service" sortBy="#{item.artService.sceNom}">
+                                <h:outputText value="#{item.artService.sceNom}" />
+                            </p:column>
+                            <p:column headerText="Taux"  sortBy="#{item.artTaux}">
+                                <h:outputText value="#{item.artTaux}" />
+                            </p:column>
 
 
+                            <p:column style="width:32px">
+                                <p:commandButton ajax="true" actionListener="#{articleBean.detailArticle}" update=":myform" oncomplete="PF('dlg2').show();" icon="ui-icon fa fa-edit" style="color:white">
+
+                                    <f:param name="userIds" value="#{item.artId}" />
+                                </p:commandButton>
+                            </p:column>
 
 
-                    </p:dataTable>
 
+
+                        </p:dataTable>
+                    </h:form>
                     <p:dialog header="Ajout " widgetVar="dlg2" modal="true" height="auto" >
                         <f:view>
                             <h:form id="myform">

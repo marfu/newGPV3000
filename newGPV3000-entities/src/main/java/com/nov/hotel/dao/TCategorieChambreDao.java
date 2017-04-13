@@ -20,5 +20,6 @@ public interface TCategorieChambreDao extends GenericDao<TCategorieChambre>{
     
   public TCategorieChambre createOrUpdateTCategorieChambre(TCategorieChambre u);         
   public TCategorieChambre getTCategorieChambre(long id);
+  public TCategorieChambre findCategorieByLib(String libelle);
     
 }

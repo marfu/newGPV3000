@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 
 /**
  *
@@ -125,4 +126,19 @@ public class TChambreDaoImpl extends GenericDaoImpl<TChambre> implements TChambr
 			return null;
 		}
 	}
+
+    @Override
+    public TChambre findChambreByLib(String libelle) {
+      TChambre result = null;
+        try {
+            Query q = em.createQuery("SELECT c FROM TChambre c where c.chLib= ?1");
+            q.setParameter(1, libelle);
+
+            result = (TChambre) q.getSingleResult();
+
+        } catch (NoResultException e) {
+            // log.debug("No result forund for... ");
+        }
+
+        return result;}
 }
