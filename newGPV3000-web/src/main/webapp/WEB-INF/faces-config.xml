@@ -143,10 +143,10 @@
             <from-outcome>factureDetail</from-outcome>
             <to-view-id>/facturedetail.xhtml</to-view-id>
         </navigation-case>
-<!--        <navigation-case>
+        <navigation-case>
             <from-outcome>parametrage</from-outcome>
             <to-view-id>/parametrage.xhtml</to-view-id>
-        </navigation-case>-->
+        </navigation-case>
         <!-- Statistique -->
         
 

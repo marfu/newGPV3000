@@ -187,6 +187,7 @@ public class FileUploadController {
                 tcategorieChambre = tcategorieChambreService.finbyCategorieChambreByLib(libelleCat);
 
                 if (tcategorieChambre == null) {
+                    tcategorieChambre = new TCategorieChambre();
                     tcategorieChambre.setCatChambreLib(libelleCat);
                     tcategorieChambre.setCatChambreDesc(descriptCat);
                     tcategorieChambre.setCatChambreDateCrea(today);
@@ -241,6 +242,7 @@ public class FileUploadController {
                 } else {
                     tchambre = tchambreService.findChambrebyLib(nomChambre);
                     if (tchambre == null) {
+                        tchambre = new TChambre();
                         tchambre.setChCategorie(tcategorieChambre);
                         tchambre.setChDateCreate(today);
                         tchambre.setChLib(nomChambre);
@@ -300,6 +302,7 @@ public class FileUploadController {
                     TOffreTarifaire toffreTarifaire = new TOffreTarifaire();
                     toffreTarifaire = toffreService.findOffreTarifaireByLib(libelleOffre);
                     if (toffreTarifaire == null) {
+                        toffreTarifaire = new TOffreTarifaire();
                         toffreTarifaire.setOffDateCreate(today);
                         toffreTarifaire.setOffTitre(libelleOffre);
                         toffreTarifaire = toffreService.CreerOrUpdateTOffreTarifaire(toffreTarifaire);
@@ -307,6 +310,7 @@ public class FileUploadController {
                         TTarif ttarif = new TTarif();
                         ttarif = ttarifService.findOffreTarifaire(toffreTarifaire.getOffreId(), tcategorieChambre.getCatChambreId());
                         if (ttarif == null) {
+                            ttarif = new TTarif();
                             ttarif.setChCategorie(tcategorieChambre);
                             ttarif.setOffre(toffreTarifaire);
                             prixs = Double.parseDouble(prix);
@@ -318,6 +322,7 @@ public class FileUploadController {
                         TTarif ttarif = new TTarif();
                         ttarif = ttarifService.findOffreTarifaire(toffreTarifaire.getOffreId(), tcategorieChambre.getCatChambreId());
                         if (ttarif == null) {
+                            ttarif = new TTarif();
                             ttarif.setChCategorie(tcategorieChambre);
                             ttarif.setOffre(toffreTarifaire);
                             prixs = Double.parseDouble(prix);
